@@ -32,6 +32,7 @@ uwb_serial_io = io.TextIOWrapper(io.BufferedRWPair(uwb_serial_port, uwb_serial_p
 uwb_label=Label(window, textvariable=uwb_distance, font=("Arial", 20)).pack()
 
 def obtain_distance():
+    # This needs to change to obtain mavlink message
     read_distance = uwb_serial_port.readline().decode('ascii', errors='replace')
     return read_distance
 
