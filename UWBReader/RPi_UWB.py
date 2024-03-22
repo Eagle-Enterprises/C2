@@ -1,6 +1,10 @@
 ####################################################
 #### Eagle Enterprises Propiertary Information  ####
 ####################################################
+#                  DESCRIPTION                     #
+# This code creates a MavLink connection and sends #
+# a distance sensor message.                       #
+####################################################
 
 # Imports
 # Requires install of python, mavproxy, and pymavlink
@@ -40,6 +44,7 @@ connection = mavutil.mavlink_connection(device, dialect)
 
 # Define how to get the distance
 def get_distance():
+    # The distance getter must be defined by S&S
     return 0
 
 # Wait for the first heartbeat
