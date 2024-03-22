@@ -30,31 +30,18 @@ gps_serial_io = io.TextIOWrapper(io.BufferedRWPair(gps_serial_port, gps_serial_p
 # Labels 
 coordinates_label=Label(window, textvariable=asset_location, font=("Arial", 20)).pack()
 
-# Method to convert latitude and longitde degrees into decimals
-def lat_long_converter(latitude, latitude_direction, longitude, longitude_direction):
-    lat_dd = int(float(latitude)/100)
-    lat_mm = float(latitude) - lat_dd * 100
-    lat_multiplier = int(1 if latitude_direction in ['N', 'E'] else -1)
-    lat_decimal = lat_multiplier * (lat_dd + lat_mm/60)
-    lat_string = str(lat_decimal)
-
-    long_dd = int(float(longitude)/100)
-    long_mm = float(longitude) - long_dd * 100
-    long_multiplier = int(1 if latitude_direction in ['N', 'E'] else -1)
-    long_decimal = long_multiplier * (long_dd + long_mm/60)
-    long_string = str(long_decimal)
-    
-    return lat_string+";"+long_string
-
 # Read COM PORT and update window display
 while True:
         sleep(1)
         try:
             nmea_parsed = pynmea2.parse(gps_serial_port.readline().decode('ascii', errors='replace'))
-            coordinates = lat_long_converter(nmea_parsed.lat, nmea_parsed.lat_dir, nmea_parsed.lon, nmea_parsed.lon_dir)
-            asset_location.set(coordinates)
+            asset_location.set(nmea_parsed.lat+";"+nmea_parsed.lon)
+            # Used for debugging
+            print(nmea_parsed.lat+":"+nmea_parsed.lon)
         except Exception as e:
             text="Gathering Asset Location"
             asset_location.set(text)
+            # Used for Debugging
+            print(text)
         window.update()
 
