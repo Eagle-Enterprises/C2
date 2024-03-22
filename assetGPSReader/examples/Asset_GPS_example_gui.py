@@ -25,8 +25,6 @@ gps_port="COM7"
 gps_baudrate=9600
 asset_location = StringVar()
 asset_location.set("Gathering Asset Location")
-uwb_distance = StringVar()
-uwb_distance.set("Distance from asset: ")
 
 # COM PORT established for Asset GPS connection
 gps_serial_port = serial.Serial(port=gps_port, baudrate=gps_baudrate, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
