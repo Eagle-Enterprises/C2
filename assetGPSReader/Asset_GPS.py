@@ -1,6 +1,12 @@
 ####################################################
 #### Eagle Enterprises Propiertary Information  ####
 ####################################################
+#                  DESCRIPTION                     #
+# This code connects to a COM port to receive NMEA #
+# sentences, converts them to coordinates # that   #
+# Mission Planner can read and displays them to a  #
+# GUI.                                             #
+####################################################
 
 # Imports
 # Requires install of python, tkinter, pyserial, and pynmea2 (i.e. pip instal pyserial)
@@ -40,10 +46,10 @@ def lat_long_converter(latitude, latitude_direction, longitude, longitude_direct
 
     long_dd = int(float(longitude)/100)
     long_mm = float(longitude) - long_dd * 100
-    long_multiplier = int(1 if latitude_direction in ['N', 'E'] else -1)
+    long_multiplier = int(1 if longitude_direction in ['N', 'E'] else -1)
     long_decimal = long_multiplier * (long_dd + long_mm/60)
     long_string = str(long_decimal)
-    
+
     return lat_string+";"+long_string
 
 # Read COM PORT and update window display
@@ -56,5 +62,9 @@ while True:
         except Exception as e:
             text="Gathering Asset Location"
             asset_location.set(text)
-        window.update()
+        try:
+            window.update()
+        except Exception as e:
+            print("Application has exited.")
+            exit()
 

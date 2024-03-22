@@ -1,6 +1,11 @@
 ####################################################
 #### Eagle Enterprises Propiertary Information  ####
 ####################################################
+#                  DESCRIPTION                     #
+# This sample depicts a connection to a COM port   #
+# and how to display the output to a GUI           #
+####################################################
+
 
 # Imports
 # Requires install of python, tkinter, pyserial, and pynmea2 (i.e. pip instal pyserial)
@@ -43,5 +48,9 @@ while True:
             asset_location.set(text)
             # Used for Debugging
             print(text)
-        window.update()
+        try:
+            window.update()
+        except Exception as e:
+            print("Application has exited.")
+            exit()
 

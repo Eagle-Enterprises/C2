@@ -1,6 +1,11 @@
 ####################################################
 #### Eagle Enterprises Propiertary Information  ####
 ####################################################
+#                  DESCRIPTION                     #
+# This sample code takes a NMEA sentence, converts #
+# it to coordinates and displays them to a         #
+# terminal.                                        #
+####################################################
 
 # Imports
 # Requires install of python, tkinter, pyserial, and pynmea2 (i.e. pip instal pyserial)
