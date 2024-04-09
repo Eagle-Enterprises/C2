@@ -1,12 +1,14 @@
 # UWB Reader Overview
 
-This part of the repository is for the Ultra Wide-Band reader for the CAPTURE project.
+This part of the repository is for the Ultra Wide-Band reader for the CAPTURE
+project.
 
 ## Companion Computer
 
-These steps help establish communication between Raspberry Pi and the C2 via MavLink messages.
+These steps help establish communication between Raspberry Pi and the C2 via
+MavLink messages.
 
-## Set up the Flight Controller to Communicate with Companion Computer (Raspberry Pi)
+## Set up the Flight Controller Communication with Companion Computer (Raspberry Pi)
 
 <https://ardupilot.org/dev/docs/raspberry-pi-via-mavlink.html#setting-up-the-flight-controller>
 
@@ -31,5 +33,5 @@ These steps help establish communication between Raspberry Pi and the C2 via Mav
         <https://mavlink.io/en/mavgen_python/#dialect_file>
         <https://stackoverflow.com/questions/5971312/how-to-set-environment-variables-in-python#:~:text=Environment%20variables%20must%20be%20strings%2C%20so%20use>
 4. Wait for first heartbeat
-5. Use the message.send() method for the desired message with its appropriate parameters:
-    For distance sensor: <https://mavlink.io/en/messages/common.html#DISTANCE_SENSOR>
+5. Use the message.send() method for the desired message with its appropriate
+    parameters:For distance sensor: <https://mavlink.io/en/messages/common.html#DISTANCE_SENSOR>
