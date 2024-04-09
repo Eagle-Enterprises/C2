@@ -8,7 +8,7 @@ project.
 These steps help establish communication between Raspberry Pi and the C2 via
 MavLink messages.
 
-## Set up the Flight Controller Communication with Companion Computer (Raspberry Pi)
+## Flight Controller Communication with Companion Computer (Raspberry Pi)
 
 <https://ardupilot.org/dev/docs/raspberry-pi-via-mavlink.html#setting-up-the-flight-controller>
 
