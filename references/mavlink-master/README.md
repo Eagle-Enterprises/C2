@@ -1,8 +1,8 @@
+# MAVLink
+
 [![Build Status](https://github.com/ArduPilot/mavlink/workflows/Test%20and%20deploy/badge.svg)](https://github.com/ArduPilot/mavlink/actions?query=branch%3Amaster)
 
-## MAVLink ##
-
-MAVLink -- Micro Air Vehicle Message Marshalling Library.
+## MAVLink -- Micro Air Vehicle Message Marshalling Library
 
 MAVLink is a very lightweight, header-only message library for communication
 between drones and/or ground control stations. It consists primarily of
@@ -27,7 +27,7 @@ Key Links:
     [Discussion/Support](https://mavlink.io/en/#support) (Slack)
     [Contributing](https://mavlink.io/en/contributing/contributing.html)
 
-### License ###
+### License
 
 MAVLink is licensed under the terms of the Lesser General Public License
 (version 3) of the Free Software Foundation (LGPLv3). The C-language version of

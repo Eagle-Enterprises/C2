@@ -9,7 +9,7 @@ Also contains tools for analyzing flight logs.
 
 ## Documentation
 
-Please see http://ardupilot.org/dev/docs/mavlink-commands.html for mavlink
+Please see <http://ardupilot.org/dev/docs/mavlink-commands.html> for mavlink
 command reference.
 
 For realtime discussion please see the pymavlink [Gitter channel](https://gitter.im/ArduPilot/pymavlink)
@@ -35,7 +35,8 @@ Pymavlink has several dependencies :
 
     - [future](http://python-future.org/) : for Python 2 and Python 3
         interoperability
-    - [lxml](http://lxml.de/installation.html) : for checking and parsing xml file
+    - [lxml](http://lxml.de/installation.html) : for checking and parsing xml
+        file
 
 Optional :
 
@@ -113,7 +114,10 @@ Or:
 
 ### Ardupilot Custom Modes
 
-By default, `pymavlink` will map the Ardupilot mode names to mode numbers per the definitions in the [ardupilotmega.xml](https://mavlink.io/en/messages/ardupilotmega.html#PLANE_MODE) file. However, during development, it can be useful to add to or update the default mode mappings.
+By default, `pymavlink` will map the Ardupilot mode names to mode numbers per
+the definitions in the [ardupilotmega.xml](https://mavlink.io/en/messages/ardupilotmega.html#PLANE_MODE)
+file. However, during development, it can be useful to add to or update the
+default mode mappings.
 
 To do this:
 
