@@ -20,4 +20,4 @@ jobs:
           pip install pylint mavproxy pymavlink pyserial pynmea2
       - name: Analysing the code with pylint
         run: |
-          pylint $(git ls-files '*.py')
+          find . -name '*.py' -not -path './references/*' | xargs pylint
