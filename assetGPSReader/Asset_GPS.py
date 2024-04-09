@@ -45,7 +45,7 @@ GPS_SERIAL_IO = io.TextIOWrapper(io.BufferedRWPair(GPS_SERIAL_PORT, GPS_SERIAL_P
 # Labels
 coordinates_label=Label(WINDOW, textvariable=ASSET_LOCATION, font=("Arial", 20)).pack()
 
-# Method to convert latitude and longitde degrees into decimals
+# Method to convert latitude and longitude degrees into decimals
 def lat_long_converter(latitude, latitude_direction, longitude, longitude_direction):
     """_summary_
 
