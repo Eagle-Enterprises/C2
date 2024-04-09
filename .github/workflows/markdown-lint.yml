@@ -3,7 +3,7 @@ name: Markdown Linting
 on: [push]
 
 jobs:
-  mdl:
+  markdownlint:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,6 +19,4 @@ jobs:
         run: npm install -g markdownlint-cli
 
       - name: Run markdownlint
-        run: actionshub/markdownlint@main
-        with:
-          filesToIgnoreRegex: "references\\/."
+        run: markdownlint '**/*.md' --ignore node_modules

@@ -12,7 +12,7 @@
 # Imports
 import os
 # Requires install of python, mavproxy, and pymavlink
-from pymavlink import mavutil
+from pymavlink import mavutil # type: ignore
 from pymavlink.dialects.v10 import ardupilotmega as mavlink1
 from pymavlink.dialects.v20 import ardupilotmega as mavlink2
 
@@ -59,8 +59,9 @@ def get_distance():
 # Wait for the first heartbeat
 #   This sets the system and component ID of remote system for the link
 connection.wait_heartbeat()
-print("Heartbeat from system (system %u component %u)" %
-      (connection.target_system, connection.target_component))
+print(f"Heartbeat from system (system {connection.target_system} \
+    component {connection.target_component})")
+
 
 # Types of messages that can be used
 # distance_sensor_message=(connection.mav.distance_sensor_send(min_distance,

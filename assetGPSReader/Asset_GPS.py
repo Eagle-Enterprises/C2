@@ -1,5 +1,5 @@
 ####################################################
-#### Eagle Enterprises Propiertary Information  ####
+#### Eagle Enterprises Proprietary Information  ####
 ####################################################
 #                  DESCRIPTION                     #
 # This code connects to a COM port to receive NMEA #
@@ -31,7 +31,7 @@ asset_location.set("Gathering Asset Location")
 gps_serial_port = serial.Serial(port=gps_port, baudrate=gps_baudrate, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
 gps_serial_io = io.TextIOWrapper(io.BufferedRWPair(gps_serial_port, gps_serial_port))
 
-# Labels 
+# Labels
 coordinates_label=Label(window, textvariable=asset_location, font=("Arial", 20)).pack()
 
 # Method to convert latitude and longitde degrees into decimals
