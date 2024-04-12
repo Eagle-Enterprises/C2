@@ -18,10 +18,23 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pylint mavproxy pymavlink pyserial pynmea2
-      - name: Analysing the code with pylint
+      - name: Running pylint
         run: |
           find . -name '*.py' \
           -not -path './references/*' \
           -not -path './assetGPSReader/examples/*' \
           -not -path './UWBReader/examples/*' \
           | xargs pylint
+      - name: Extract pylint scores
+        id: extract_scores
+        run: |
+          pylint --output-format=parseable **/*.py | grep -oP 'rated at \K[0-9.]+' | awk '{s+=$1} END {print s/NR}'
+      - name: Check pylint overall score
+        run: |
+          if [ $(echo "${{ steps.extract_scores.outputs.stdout }} > 9" | bc -l) -eq 1 ]; then
+            echo "Overall Pylint score is above 9/10"
+            exit 0
+          else
+            echo "Overall Pylint score is below 9/10"
+            exit 1
+          fi
