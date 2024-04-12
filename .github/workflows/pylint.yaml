@@ -24,7 +24,7 @@ jobs:
           -not -path './references/*' \
           -not -path './assetGPSReader/examples/*' \
           -not -path './UWBReader/examples/*' \
-          | xargs pylint
+          | xargs pylint --fail-on=5
       - name: Extract pylint scores
         id: extract_scores
         run: |
