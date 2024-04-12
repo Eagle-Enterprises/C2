@@ -18,6 +18,7 @@ Returns:
 # Requires install of python, tkinter, pyserial, and pynmea2 (i.e. pip install pyserial)
 from tkinter import Tk, Canvas, StringVar, Label
 import io
+import sys
 import serial # type: ignore
 # from time import sleep
 import pynmea2
@@ -40,10 +41,10 @@ GPS_SERIAL_PORT = serial.Serial(port=GPS_PORT, baudrate=GPS_BAUDRATE,
                                 bytesize=8, timeout=2,
                                 stopbits=serial.STOPBITS_ONE)
 
-GPS_SERIAL_IO = io.TextIOWrapper(io.BufferedRWPair(GPS_SERIAL_PORT, GPS_SERIAL_PORT))
-
+GPS_SERIAL_IO = io.TextIOWrapper(io.BufferedReader(GPS_SERIAL_PORT))
 # Labels
-coordinates_label=Label(WINDOW, textvariable=ASSET_LOCATION, font=("Arial", 20)).pack()
+COORDINATES_LABEL=Label(WINDOW, textvariable=ASSET_LOCATION, font=("Arial", 20))
+COORDINATES_LABEL.pack()
 
 # Method to convert latitude and longitude degrees into decimals
 def lat_long_converter(latitude, latitude_direction, longitude, longitude_direction):
@@ -85,4 +86,4 @@ while True:
         WINDOW.update()
     except Exception as e:
         print("Application has exited.")
-        exit()
+        sys.exit()

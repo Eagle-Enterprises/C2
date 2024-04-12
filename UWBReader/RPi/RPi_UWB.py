@@ -13,8 +13,10 @@
 import os
 # Requires install of python, mavproxy, and pymavlink
 from pymavlink import mavutil # type: ignore
-from pymavlink.dialects.v10 import ardupilotmega as mavlink1
-from pymavlink.dialects.v20 import ardupilotmega as mavlink2
+
+# TODO:Remove comments once these are used
+#from pymavlink.dialects.v10 import ardupilotmega as mavlink1
+#from pymavlink.dialects.v20 import ardupilotmega as mavlink2
 
 
 # Constants and Variables
