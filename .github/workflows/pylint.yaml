@@ -21,10 +21,9 @@ jobs:
       - name: Run pylint and extract scores
         id: pylint_with_scores
         run: |
-          pylint --output-format=parseable --ignore=references,test/examples **/*.py | tee pylint_output.txt
+          pylint --output-format=parseable --ignore=references,test/examples **/*.py | tee pylint_output.txt || true
           scores=$(grep -oP 'rated at \K[0-9.]+' pylint_output.txt | awk '{s+=$1} END {print s/NR}')
           echo "::set-output name=scores::$scores"
-        shell: bash || exit 0
       - name: Check pylint overall score
         run: |
           scores=${{ steps.pylint_with_scores.outputs.scores }}
