@@ -90,29 +90,29 @@ class App(customtkinter.CTk):
         # Second column
         
         # Placeholder behind asset location
-        self.location_bckg = customtkinter.CTkFrame(self)
-        self.location_bckg.grid(row=1, column=2, padx=(20, 0), pady=(10, 20), sticky="nsew")
-        self.location_bckg.rowconfigure(0, weight=1)
-        self.location_bckg.columnconfigure(0, weight=1) 
+        self.location_bkg = customtkinter.CTkFrame(self)
+        self.location_bkg.grid(row=1, column=2, padx=(20, 0), pady=(10, 20), sticky="nsew")
+        self.location_bkg.rowconfigure(0, weight=1)
+        self.location_bkg.columnconfigure(0, weight=1) 
         
         # Asset Location title and value
         self.location_title_label = customtkinter.CTkLabel(self, textvariable=self.location_label_content, font=customtkinter.CTkFont(size=14, weight="bold"), justify="center", anchor="w")
         self.location_title_label.grid(row=0, column=2, padx=20, pady=20)
-        self.location_value_label = customtkinter.CTkLabel(self.location_bckg, textvariable=self.location_value, font=customtkinter.CTkFont(size=14))
+        self.location_value_label = customtkinter.CTkLabel(self.location_bkg, textvariable=self.location_value, font=customtkinter.CTkFont(size=14))
         self.location_value_label.grid(row=0, column=0, padx=20, pady=20)  
         
         #Third column  
         
         # Placeholder behind distance
-        self.distance_bckg = customtkinter.CTkFrame(self)
-        self.distance_bckg.grid(row=1, column=4, padx=(20, 20), pady=(10, 20), sticky="nsew") 
-        self.distance_bckg.rowconfigure(0, weight=1)
-        self.distance_bckg.columnconfigure(0, weight=1)
+        self.distance_bkg = customtkinter.CTkFrame(self)
+        self.distance_bkg.grid(row=1, column=4, padx=(20, 20), pady=(10, 20), sticky="nsew") 
+        self.distance_bkg.rowconfigure(0, weight=1)
+        self.distance_bkg.columnconfigure(0, weight=1)
         
         # Asset Distance title and Value
         self.asset_distance_title_label = customtkinter.CTkLabel(self, textvariable=self.distance_label_content, font=customtkinter.CTkFont(size=14, weight="bold"), justify="center", anchor="w")
         self.asset_distance_title_label.grid(row=0, column=4, padx=20, pady=20)
-        self.asset_distance_label = customtkinter.CTkLabel(self.distance_bckg, textvariable=self.distance_value, font=customtkinter.CTkFont(size=14))
+        self.asset_distance_label = customtkinter.CTkLabel(self.distance_bkg, textvariable=self.distance_value, font=customtkinter.CTkFont(size=14))
         self.asset_distance_label.grid(row=0, column=0, padx=20, pady=20) 
         
         # Update location and distance. Code to obtain location and distance to be added once integrated with sensors.
