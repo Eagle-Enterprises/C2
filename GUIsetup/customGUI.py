@@ -34,6 +34,7 @@ class App(customtkinter.CTk):
         self.grid_columnconfigure(2, weight=3)
         
         # Variables and constants
+        
         # Location
         self.initial_location_label_content="Scanning for target location coordinates…"
         self.final_location_label_content="Target found at:"
@@ -42,9 +43,11 @@ class App(customtkinter.CTk):
         self.location_label_content.set(self.initial_location_label_content)
         self.location_value = StringVar()
         self.location_value.set(self.initial_location)
+        
         # Location used only for initial tests
         #GPS_example_location=""
         GPS_example_location="38.924144999999996;94.76678500000001"
+        
         # Distance
         self.initial_distance_label_content="Scanning for target distance..."
         self.final_distance_label_content="Distance form Target:"
@@ -53,6 +56,7 @@ class App(customtkinter.CTk):
         self.distance_label_content.set(self.initial_distance_label_content)
         self.distance_value = StringVar()
         self.distance_value.set(self.initial_distance)
+        
         # Distance used only for initial tests
         #example_distance=0
         example_distance=190
@@ -106,10 +110,10 @@ class App(customtkinter.CTk):
         self.asset_distance_label = customtkinter.CTkLabel(self.distance_bckg, textvariable=self.distance_value)
         self.asset_distance_label.grid(row=0, column=0, padx=20, pady=20) 
         
-        # Update location and distance
-        self.update_asset_distance(example_distance)
+        # Update location and distance. Code to obtain location and distance to be added once integrated with sensors.
         self.update_asset_location(GPS_example_location)
-        #self.update()
+        self.update_asset_distance(example_distance)
+        #self.update() # Not sure if needed
 
     # Method to change appearance
     def change_appearance_mode_event(self, new_appearance_mode: str):
@@ -118,15 +122,14 @@ class App(customtkinter.CTk):
     # Method to update location  
     def update_asset_location(self, location: str):
         if location != "":
-            self.location_value.set(location)
             self.location_label_content.set(self.final_location_label_content)
+            self.location_value.set(location)
         
     # Method to update distance 
     def update_asset_distance(self, distance: int):
         if distance > 0:
-            self.distance_value.set(distance)
             self.distance_label_content.set(self.final_distance_label_content)
-
+            self.distance_value.set(str(distance)+" ft.")
 
 if __name__ == "__main__":
     app = App()
