@@ -41,7 +41,7 @@ class App(customtkinter.CTk):
         # Variables and constants
         
         # Location
-        self.initial_location_label_content="Scanning for target location coordinates…"
+        self.initial_location_label_content="Calculating target position…"
         self.final_location_label_content="Target found at:"
         self.initial_location=""
         self.location_label_content = StringVar()
@@ -54,7 +54,7 @@ class App(customtkinter.CTk):
         GPS_example_location="38.924144999999996;94.76678500000001"
         
         # Distance
-        self.initial_distance_label_content="Scanning for target distance..."
+        self.initial_distance_label_content="Calculating target distance..."
         self.final_distance_label_content="Distance form Target:"
         self.initial_distance=""
         self.distance_label_content = StringVar()
@@ -98,7 +98,7 @@ class App(customtkinter.CTk):
         # Asset Location title and value
         self.location_title_label = customtkinter.CTkLabel(self, textvariable=self.location_label_content, font=customtkinter.CTkFont(size=14, weight="bold"), justify="center", anchor="w")
         self.location_title_label.grid(row=0, column=2, padx=20, pady=20)
-        self.location_value_label = customtkinter.CTkLabel(self.location_bckg, textvariable=self.location_value, font=customtkinter.CTkFont(size=12))
+        self.location_value_label = customtkinter.CTkLabel(self.location_bckg, textvariable=self.location_value, font=customtkinter.CTkFont(size=14))
         self.location_value_label.grid(row=0, column=0, padx=20, pady=20)  
         
         #Third column  
@@ -112,7 +112,7 @@ class App(customtkinter.CTk):
         # Asset Distance title and Value
         self.asset_distance_title_label = customtkinter.CTkLabel(self, textvariable=self.distance_label_content, font=customtkinter.CTkFont(size=14, weight="bold"), justify="center", anchor="w")
         self.asset_distance_title_label.grid(row=0, column=4, padx=20, pady=20)
-        self.asset_distance_label = customtkinter.CTkLabel(self.distance_bckg, textvariable=self.distance_value)
+        self.asset_distance_label = customtkinter.CTkLabel(self.distance_bckg, textvariable=self.distance_value, font=customtkinter.CTkFont(size=14))
         self.asset_distance_label.grid(row=0, column=0, padx=20, pady=20) 
         
         # Update location and distance. Code to obtain location and distance to be added once integrated with sensors.
@@ -129,6 +129,8 @@ class App(customtkinter.CTk):
         if location != "":
             self.location_label_content.set(self.final_location_label_content)
             self.location_value.set(location)
+            # Copies location to clipboard so the user may paste it in MP
+            self.clipboard_append(location)
         
     # Method to update distance 
     def update_asset_distance(self, distance: int):
