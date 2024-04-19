@@ -15,11 +15,13 @@ import serial
 from time import sleep
 import pynmea2
 import io
+import customtkinter
 
 # GUI Window set up
-window = Tk()
+window = customtkinter.CTk()
 window.title("CAPTURE")
-window_canvas = Canvas(window, width=400, height=30).pack()
+window_canvas = customtkinter.CTkCanvas(window, width=400, height=30).pack()
+customtkinter.set_appearance_mode("dark-blue")
 
 #variables & constants
 gps_port="COM7"
@@ -32,7 +34,7 @@ gps_serial_port = serial.Serial(port=gps_port, baudrate=gps_baudrate, bytesize=8
 gps_serial_io = io.TextIOWrapper(io.BufferedRWPair(gps_serial_port, gps_serial_port))
 
 # Labels 
-coordinates_label=Label(window, textvariable=asset_location, font=("Arial", 12)).pack()
+coordinates_label=customtkinter.CTkLabel(window, textvariable=asset_location, font=("Arial", 12)).pack()
 
 # Method to convert latitude and longitde degrees into decimals
 def lat_long_converter(latitude, latitude_direction, longitude, longitude_direction):
