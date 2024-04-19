@@ -1,69 +1,133 @@
 ####################################################
-#### Eagle Enterprises Propiertary Information  ####
+#### Eagle Enterprises Proprietary Information  ####
 ####################################################
 #                  DESCRIPTION                     #
-# This code connects to a COM port to receive NMEA #
-# sentences, converts them to coordinates # that   #
-# Mission Planner can read and displays them to a  #
-# GUI.                                             #
+# This code displays the CAPTURE target asset      #
+# information to a GUI.                            #
 ####################################################
 
-# Imports
-# Requires install of python, tkinter, pyserial, and pynmea2 (i.e. pip instal pyserial)
-from tkinter import *
-import serial
-from time import sleep
-import pynmea2
-import io
+import tkinter
+import tkinter.messagebox
 import customtkinter
+from customtkinter import *
+import io
 
-# GUI Window set up
-window = customtkinter.CTk()
-window.title("CAPTURE")
-window_canvas = customtkinter.CTkCanvas(window, width=400, height=30).pack()
-customtkinter.set_appearance_mode("dark-blue")
+# Set initial appearance mode
+customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
+customtkinter.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
-#variables & constants
-gps_port="COM7"
-gps_baudrate=9600
-asset_location = StringVar()
-asset_location.set("Gathering Asset Location")
+class App(customtkinter.CTk):
+    
+    # Method to initialize and configure the window
+    def __init__(self):
+        super().__init__()
 
-# COM PORT established for Asset GPS connection
-gps_serial_port = serial.Serial(port=gps_port, baudrate=gps_baudrate, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-gps_serial_io = io.TextIOWrapper(io.BufferedRWPair(gps_serial_port, gps_serial_port))
+        # Window configuration
+        self.title("CAPTURE Target Asset Locator")
+        self.geometry(f"{1100}x{140}")
 
-# Labels 
-coordinates_label=customtkinter.CTkLabel(window, textvariable=asset_location, font=("Arial", 12)).pack()
+        # Grid layout
+        self.grid_rowconfigure(1, weight=0)
+        self.grid_rowconfigure((0, 1, 2, 3), weight=1)
+        self.grid_columnconfigure(4, weight=2)
+        self.grid_columnconfigure((1, 3, 5), weight=0)
+        self.grid_columnconfigure(2, weight=3)
+        
+        # Variables and constants
+        # Location
+        self.initial_location_label_content="Scanning for target location coordinates…"
+        self.final_location_label_content="Target found at:"
+        self.initial_location=""
+        self.location_label_content = StringVar()
+        self.location_label_content.set(self.initial_location_label_content)
+        self.location_value = StringVar()
+        self.location_value.set(self.initial_location)
+        # Location used only for initial tests
+        #GPS_example_location=""
+        GPS_example_location="38.924144999999996;94.76678500000001"
+        # Distance
+        self.initial_distance_label_content="Scanning for target distance..."
+        self.final_distance_label_content="Distance form Target:"
+        self.initial_distance=""
+        self.distance_label_content = StringVar()
+        self.distance_label_content.set(self.initial_distance_label_content)
+        self.distance_value = StringVar()
+        self.distance_value.set(self.initial_distance)
+        # Distance used only for initial tests
+        #example_distance=0
+        example_distance=190
+        
+        #First column
+        
+        # Sidebar frame with widgets
+        self.sidebar_frame = customtkinter.CTkFrame(self, width=140, corner_radius=0)
+        self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
+        #self.sidebar_frame.grid_rowconfigure(3, weight=1)
+        
+        # Label inside sidebar
+        self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="CAPTURE Target", font=customtkinter.CTkFont(size=20, weight="bold"))
+        self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 10))
+        
+        # Appearance menu
+        self.appearance_mode_label = customtkinter.CTkLabel(self.sidebar_frame, text="Appearance Mode:", anchor="w")
+        self.appearance_mode_label.grid(row=1, column=0, padx=20, pady=(10, 0))
+        self.appearance_mode_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["Light", "Dark", "System"],
+        command=self.change_appearance_mode_event)
+        self.appearance_mode_optionemenu.grid(row=2, column=0, padx=20, pady=(0, 10))
 
-# Method to convert latitude and longitde degrees into decimals
-def lat_long_converter(latitude, latitude_direction, longitude, longitude_direction):
-    lat_dd = int(float(latitude)/100)
-    lat_mm = float(latitude) - lat_dd * 100
-    lat_multiplier = int(1 if latitude_direction in ['N', 'E'] else -1)
-    lat_decimal = lat_multiplier * (lat_dd + lat_mm/60)
-    lat_string = str(lat_decimal)
+        # Default value for appearance
+        self.appearance_mode_optionemenu.set("Dark")
+        
+        # Second column
+        
+        # Placeholder behind asset location
+        self.location_bckg = customtkinter.CTkFrame(self)
+        self.location_bckg.grid(row=1, column=2, padx=(20, 0), pady=(10, 20), sticky="nsew")
+        self.location_bckg.rowconfigure(0, weight=1)
+        self.location_bckg.columnconfigure(0, weight=1) 
+        
+        # Asset Location title and value
+        self.location_title_label = customtkinter.CTkLabel(self, textvariable=self.location_label_content, font=customtkinter.CTkFont(size=14, weight="bold"), justify="center", anchor="w")
+        self.location_title_label.grid(row=0, column=2, padx=20, pady=20)
+        self.location_value_label = customtkinter.CTkLabel(self.location_bckg, textvariable=self.location_value, font=customtkinter.CTkFont(size=12))
+        self.location_value_label.grid(row=0, column=0, padx=20, pady=20)  
+        
+        #Third column  
+        
+        # Placeholder behind distance
+        self.distance_bckg = customtkinter.CTkFrame(self)
+        self.distance_bckg.grid(row=1, column=4, padx=(20, 20), pady=(10, 20), sticky="nsew") 
+        self.distance_bckg.rowconfigure(0, weight=1)
+        self.distance_bckg.columnconfigure(0, weight=1)
+        
+        # Asset Distance title and Value
+        self.asset_distance_title_label = customtkinter.CTkLabel(self, textvariable=self.distance_label_content, font=customtkinter.CTkFont(size=14, weight="bold"), justify="center", anchor="w")
+        self.asset_distance_title_label.grid(row=0, column=4, padx=20, pady=20)
+        self.asset_distance_label = customtkinter.CTkLabel(self.distance_bckg, textvariable=self.distance_value)
+        self.asset_distance_label.grid(row=0, column=0, padx=20, pady=20) 
+        
+        # Update location and distance
+        self.update_asset_distance(example_distance)
+        self.update_asset_location(GPS_example_location)
+        #self.update()
 
-    long_dd = int(float(longitude)/100)
-    long_mm = float(longitude) - long_dd * 100
-    long_multiplier = int(1 if longitude_direction in ['N', 'E'] else -1)
-    long_decimal = long_multiplier * (long_dd + long_mm/60)
-    long_string = str(long_decimal)
+    # Method to change appearance
+    def change_appearance_mode_event(self, new_appearance_mode: str):
+        customtkinter.set_appearance_mode(new_appearance_mode)
+    
+    # Method to update location  
+    def update_asset_location(self, location: str):
+        if location != "":
+            self.location_value.set(location)
+            self.location_label_content.set(self.final_location_label_content)
+        
+    # Method to update distance 
+    def update_asset_distance(self, distance: int):
+        if distance > 0:
+            self.distance_value.set(distance)
+            self.distance_label_content.set(self.final_distance_label_content)
 
-    return lat_string+";"+long_string
 
-# Read COM PORT and update window display
-while True:
-        try:
-            nmea_parsed = pynmea2.parse(gps_serial_port.readline().decode('ascii', errors='replace'))
-            coordinates = lat_long_converter(nmea_parsed.lat, nmea_parsed.lat_dir, nmea_parsed.lon, nmea_parsed.lon_dir)
-            asset_location.set(coordinates)
-        except Exception as e:
-            text="Gathering Asset Location"
-            asset_location.set(text)
-        try:
-            window.update()
-        except Exception as e:
-            print("Application has exited.")
-            exit()
-
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
