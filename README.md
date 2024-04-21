@@ -26,7 +26,9 @@ enter this:
 
 ### password: EagleEnterprisesC2
 
-then continue with the login. Now you should be good to go :), you should see mission planner and all the development stuff to work with and feel free to download more stuff if you need it.
+then continue with the login. Now you should be good to go :), you should see
+mission planner and all the development stuff to work with and feel free to
+download more stuff if you need it.
 
 ## Loaner Laptop
 
@@ -37,8 +39,9 @@ First login to outlook using the below credentials:
 <EagleForUsC2@outlook.com>
 EagleEnterprisesC2
 
-Next go download [Team Viewer](https://www.teamviewer.com/en-us/download/windows/?utm_source=google&utm_medium=cpc&utm_campaign=us%7Cb%7Cpr%7C22%7Caug%7Ctv-core-download-sn%7Cnew%7Ct0%7C0&utm_content=Download&utm_term=teamviewer+download) for windows, mac, android, or IOS (mobil version call it team viewer remote connection or
-something)
+Next go download [Team Viewer](https://www.teamviewer.com/en-us/download/windows/?utm_source=google&utm_medium=cpc&utm_campaign=us%7Cb%7Cpr%7C22%7Caug%7Ctv-core-download-sn%7Cnew%7Ct0%7C0&utm_content=Download&utm_term=teamviewer+download)
+for windows, mac, android, or IOS (mobil version call it team viewer remote
+connection or something)
 
 Once downloaded login:
 <EagleForUsC2@outlook.com>
