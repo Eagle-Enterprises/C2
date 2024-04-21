@@ -5,7 +5,7 @@ more flexibility and security to MAVLink communication.
 
 A background document on the MAVLink2 design is available here:
 
-  https://docs.google.com/document/d/1XtbD0ORNkhZ8eKrsbSIZNLyg9sFRXMXbsR2mp37KbIg/edit?usp=sharing
+  <https://docs.google.com/document/d/1XtbD0ORNkhZ8eKrsbSIZNLyg9sFRXMXbsR2mp37KbIg/edit?usp=sharing>
 
 it is suggested that you start by reading that document.
 
@@ -31,7 +31,7 @@ existing MAVLink1 implementation. You start by generating the MAVLink2
 headers using mavgen.py, but passing the --wire-protocol=2.0
 option. For example:
 
-```
+```bash
  mavgen.py --lang C message_definitions/v1.0/ardupilotmega.xml -o generator/C/include_v2.0 --wire-protocol=2.0
 ```
 
@@ -52,7 +52,7 @@ MAVLink1 packets as well. To force sending MAVLink1 packets on a
 particular channel you change the flags field of the status
 object. For example:
 
-```
+```bash
    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
    status->flags |= MAVLINK_STATUS_FLAG_OUT_MAVLINK1;
 ```
@@ -65,7 +65,7 @@ MAVLink1. If you need to determine if a particular message was received as
 MAVLink1 or MAVLink2 then you can use the magic field of the message,
 like this:
 
-```
+```bash
   if (msg->magic = MAVLINK_STX_MAVLINK1) {
      printf("This is a MAVLink1 message\n");
   }
@@ -84,7 +84,7 @@ The XML for messages can contain extensions that are optional in the
 protocol. This allows for extra fields to be added to a message. For
 example:
 
-```
+```xml
   <message id="152" name="MEMINFO">
     <description>state of APM memory</description>
     <field name="brkval" type="uint16_t">heap top</field>
@@ -117,7 +117,7 @@ some additional code. In particular you will need to add:
 
 Example code in ArduPilot for each of these pieces if available here:
 
- https://github.com/tridge/ardupilot/blob/mavlink2-wip/libraries/GCS_MAVLink/GCS_Signing.cpp
+ <https://github.com/tridge/ardupilot/blob/mavlink2-wip/libraries/GCS_MAVLink/GCS_Signing.cpp>
 
 ### Handling SETUP_SIGNING
 
@@ -165,7 +165,7 @@ the signing system. The rules are:
 To enable signing on a channel you need to fill in two pointers in the
 status structure for the cnannel. The two pointed are:
 
-```
+```python
    mavlink_signing_t *signing;
    mavlink_signing_streams_t *signing_streams;
 ```
@@ -175,7 +175,7 @@ per-stream, and contains the secret key, the timestamp and a set of
 flags, plus an optional callback function for accepting unsigned
 packets. Typical setup would be:
 
-```
+```python
     memcpy(signing.secret_key, key.secret_key, 32);
     signing.link_id = (uint8_t)chan;
     signing.timestamp = key.timestamp;
@@ -190,7 +190,7 @@ timestamp for a (linkId,srcSystem,SrcComponent) tuple. This must point
 to a structure that is common to all channels in order to prevent
 inter-channel replay attacks. Typical setup is:
 
-```
+```python
     mavlink_status_t *status = mavlink_get_channel_status(chan);
     status.signing_streams = &signing_streams;
 ```
@@ -205,9 +205,9 @@ runs out of signing streams then new streams will be rejected.
 In the signing structure there is an optional accept_unsigned_callback
 function pointer. The C prototype for this function is:
 
-```
+```python
     bool accept_unsigned_callback(const mavlink_status_t *status, uint32_t msgId);
-```                                     
+```
 
 If set in the signing structure then this function will be called on
 any unsigned packet (including all MAVLink1 packets) or any packet
@@ -226,25 +226,25 @@ considered:
 
 For example:
 
-```
+```python
 static const uint32_t unsigned_messages[] = {
-	MAVLINK_MSG_ID_RADIO_STATUS
+  MAVLINK_MSG_ID_RADIO_STATUS
 };
 
 static bool accept_unsigned_callback(const mavlink_status_t *status, uint32_t message_id)
 {
-	// Make the assumption that channel 0 is USB and should always be accessible
-	if (status == mavlink_get_channel_status(MAVLINK_COMM_0)) {
-		return true;
-	}
+  // Make the assumption that channel 0 is USB and should always be accessible
+  if (status == mavlink_get_channel_status(MAVLINK_COMM_0)) {
+    return true;
+  }
 
-	for (unsigned i = 0; i < sizeof(unsigned_messages) / sizeof(unsigned_messages[0]); i++) {
-		if (unsigned_messages[i] == message_id) {
-			return true;
-		}
-	}
+  for (unsigned i = 0; i < sizeof(unsigned_messages) / sizeof(unsigned_messages[0]); i++) {
+    if (unsigned_messages[i] == message_id) {
+      return true;
+    }
+  }
 
-	return false;
+  return false;
 }
 ```
 
@@ -272,7 +272,7 @@ received for the same stream tuple on the other communication link.
 
 The solution that I have adopted for MAVProxy is this:
 
-```
+```python
         if (msg.get_signed() and
             self.mav.signing.link_id == 0 and
             msg.get_link_id() != 0 and
@@ -289,7 +289,6 @@ ID then it switches link ID to the one from the incoming packet.
 The has the effect of making the GCS slave its link ID to the link ID
 of the autopilot.
 
-
 ### Negotiating MAVLink2
 
 It is expected that vehicle and GCS implementations will support both
@@ -300,25 +299,24 @@ implementations that don't yet support MAVLink2.
 The following is meant to capture best practice for vehicle firmware
 and GCS authors:
 
- * vehicle implementations should have a way to enable/disable the
- sending of MAVLink2 messages. This should preferably be on a per-link
- basis to allow for some peripherals to be MAVLink1 while others are
- MAVLink2. It is acceptable for this option to require a reboot of the flight controller to take effect.
+* vehicle implementations should have a way to enable/disable the
+sending of MAVLink2 messages. This should preferably be on a per-link
+basis to allow for some peripherals to be MAVLink1 while others are
+MAVLink2. It is acceptable for this option to require a reboot of the flight controller to take effect.
 
- * if signing is enabled and MAVLink2 is enabled then the vehicle should
- immediately start sending MAVLink2 on startup
+* if signing is enabled and MAVLink2 is enabled then the vehicle should
+immediately start sending MAVLink2 on startup
 
- * if signing is not enabled and MAVLink2 is enabled then the vehicle may
- choose to start by sending MAVLink1 and switch to MAVLink2 on a link
- when it first receives a MAVLink2 message on the link
+* if signing is not enabled and MAVLink2 is enabled then the vehicle may
+choose to start by sending MAVLink1 and switch to MAVLink2 on a link
+when it first receives a MAVLink2 message on the link
 
- * vehicles should set the MAV_PROTOCOL_CAPABILITY_MAVLINK2 capability
- flag in the AUTOPILOT_VERSION message if MAVLink2 is available on a
- link. This should be set in the case where the link is currently sending MAVLink1 packets but MAVLink2 packets will be accepted and will cause a switch to MAVLink2
- 
- * GCS implementations can choose to either automatically switch to MAVLink2 where available or to have a configuration option for MAVLink2
- 
- * if the GCS chooses to use a configuration option then when the option is enabled it should send MAVLink2 on starting the link
- 
- * if the GCS chooses to use automatic switching then it should switch to sending MAVLink2 if either it receives a MAVLink2 message on the link or by asking for the AUTOPILOT_VERSION message to be sent and seeing the MAV_PROTOCOL_CAPABILITY_MAVLINK2 flag is set
- 
+* vehicles should set the MAV_PROTOCOL_CAPABILITY_MAVLINK2 capability
+flag in the AUTOPILOT_VERSION message if MAVLink2 is available on a
+link. This should be set in the case where the link is currently sending MAVLink1 packets but MAVLink2 packets will be accepted and will cause a switch to MAVLink2
+
+* GCS implementations can choose to either automatically switch to MAVLink2 where available or to have a configuration option for MAVLink2
+
+* if the GCS chooses to use a configuration option then when the option is enabled it should send MAVLink2 on starting the link
+
+* if the GCS chooses to use automatic switching then it should switch to sending MAVLink2 if either it receives a MAVLink2 message on the link or by asking for the AUTOPILOT_VERSION message to be sent and seeing the MAV_PROTOCOL_CAPABILITY_MAVLINK2 flag is set

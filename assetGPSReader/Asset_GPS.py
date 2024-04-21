@@ -1,5 +1,11 @@
+"""_summary_
+
+Returns:
+    _type_: _description_
+"""
+
 ####################################################
-#### Eagle Enterprises Propiertary Information  ####
+#### Eagle Enterprises Proprietary Information  ####
 ####################################################
 #                  DESCRIPTION                     #
 # This code connects to a COM port to receive NMEA #
@@ -9,39 +15,55 @@
 ####################################################
 
 # Imports
-# Requires install of python, tkinter, pyserial, and pynmea2 (i.e. pip instal pyserial)
-from tkinter import *
-import serial
-from time import sleep
-import pynmea2
+# Requires install of python, tkinter, pyserial, and pynmea2 (i.e. pip install pyserial)
+from tkinter import Tk, Canvas, StringVar, Label
 import io
+import sys
+import serial # type: ignore
+# from time import sleep
+import pynmea2
+
 
 # GUI Window set up
-window = Tk()
-window.title("Asset GPS Location")
-window_canvas = Canvas(window, width=400, height=30).pack()
+WINDOW = Tk()
+WINDOW.title("Asset GPS Location")
+WINDOW_CANVAS = Canvas(WINDOW, width=400, height=30)
+WINDOW_CANVAS.pack()
 
 #variables & constants
-gps_port="COM7"
-gps_baudrate=9600
-asset_location = StringVar()
-asset_location.set("Gathering Asset Location")
+GPS_PORT="COM7"
+GPS_BAUDRATE=9600
+ASSET_LOCATION = StringVar()
+ASSET_LOCATION.set("Gathering Asset Location")
 
 # COM PORT established for Asset GPS connection
-gps_serial_port = serial.Serial(port=gps_port, baudrate=gps_baudrate, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-gps_serial_io = io.TextIOWrapper(io.BufferedRWPair(gps_serial_port, gps_serial_port))
+GPS_SERIAL_PORT = serial.Serial(port=GPS_PORT, baudrate=GPS_BAUDRATE,
+                                bytesize=8, timeout=2,
+                                stopbits=serial.STOPBITS_ONE)
 
-# Labels 
-coordinates_label=Label(window, textvariable=asset_location, font=("Arial", 20)).pack()
+GPS_SERIAL_IO = io.TextIOWrapper(io.BufferedReader(GPS_SERIAL_PORT))
+# Labels
+COORDINATES_LABEL=Label(WINDOW, textvariable=ASSET_LOCATION, font=("Arial", 20))
+COORDINATES_LABEL.pack()
 
-# Method to convert latitude and longitde degrees into decimals
+# Method to convert latitude and longitude degrees into decimals
 def lat_long_converter(latitude, latitude_direction, longitude, longitude_direction):
+    """_summary_
+
+    Args:
+        latitude (_type_): _description_
+        latitude_direction (_type_): _description_
+        longitude (_type_): _description_
+        longitude_direction (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     lat_dd = int(float(latitude)/100)
     lat_mm = float(latitude) - lat_dd * 100
     lat_multiplier = int(1 if latitude_direction in ['N', 'E'] else -1)
     lat_decimal = lat_multiplier * (lat_dd + lat_mm/60)
     lat_string = str(lat_decimal)
-
     long_dd = int(float(longitude)/100)
     long_mm = float(longitude) - long_dd * 100
     long_multiplier = int(1 if longitude_direction in ['N', 'E'] else -1)
@@ -52,16 +74,16 @@ def lat_long_converter(latitude, latitude_direction, longitude, longitude_direct
 
 # Read COM PORT and update window display
 while True:
-        try:
-            nmea_parsed = pynmea2.parse(gps_serial_port.readline().decode('ascii', errors='replace'))
-            coordinates = lat_long_converter(nmea_parsed.lat, nmea_parsed.lat_dir, nmea_parsed.lon, nmea_parsed.lon_dir)
-            asset_location.set(coordinates)
-        except Exception as e:
-            text="Gathering Asset Location"
-            asset_location.set(text)
-        try:
-            window.update()
-        except Exception as e:
-            print("Application has exited.")
-            exit()
-
+    try:
+        NMEA_PARSED = pynmea2.parse(GPS_SERIAL_PORT.readline().decode('ascii', errors='replace'))
+        COORDINATES = lat_long_converter(NMEA_PARSED.lat, NMEA_PARSED.lat_dir,
+                                         NMEA_PARSED.lon, NMEA_PARSED.lon_dir)
+        ASSET_LOCATION.set(COORDINATES)
+    except Exception as e:
+        TEXT="Gathering Asset Location"
+        ASSET_LOCATION.set(TEXT)
+    try:
+        WINDOW.update()
+    except Exception as e:
+        print("Application has exited.")
+        sys.exit()
