@@ -36,8 +36,9 @@ We have now acquired and setup a new C2 machine that will be used during demo
 day. Below are the instructions on how to login and setup the connection:
 
 First login to outlook using the below credentials:
-<EagleForUsC2@outlook.com>
-EagleEnterprisesC2
+
+iD:   <EagleForUsC2@outlook.com>
+Pass: EagleEnterprisesC2
 
 Next go download [Team Viewer](https://www.teamviewer.com/en-us/download/windows/?utm_source=google&utm_medium=cpc&utm_campaign=us%7Cb%7Cpr%7C22%7Caug%7Ctv-core-download-sn%7Cnew%7Ct0%7C0&utm_content=Download&utm_term=teamviewer+download)
 for windows, mac, android, or IOS (mobil version call it team viewer remote
