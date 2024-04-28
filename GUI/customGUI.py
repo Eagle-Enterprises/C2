@@ -50,8 +50,8 @@ class App(customtkinter.CTk):
         self.location_value.set(self.initial_location)
         
         # Location used only for initial tests
-        #GPS_example_location=""
-        GPS_example_location="38.924144999999996;94.76678500000001"
+        GPS_example_location=""
+        #GPS_example_location="38.924144999999996;94.76678500000001"
         
         # Distance
         self.initial_distance_label_content="Calculating target distance..."
@@ -63,8 +63,8 @@ class App(customtkinter.CTk):
         self.distance_value.set(self.initial_distance)
         
         # Distance used only for initial tests
-        #example_distance=0
-        example_distance=190
+        example_distance=0
+        #example_distance=190
         
         #First column
         
