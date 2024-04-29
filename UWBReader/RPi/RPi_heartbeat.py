@@ -1,30 +1,34 @@
+"""_summary_
+"""
 ####################################################
-#### Eagle Enterprises Propiertary Information  ####
+#### Eagle Enterprises Proprietary Information  ####
 ####################################################
 
 # Imports
 # Requires install of python, mavproxy, and pymavlink
-from pymavlink import mavutil
 import os
+from pymavlink import mavutil
+
 
 # Constants and Variables
 
 # MavLink connection variables
-protocol="udpin"
-host="localhost"
-port='14540'
-device=protocol+":"+host+":"+port
-dialect="common" #common, standard
-mavlink_20="0"
-mavlink_mdef="0"
+PROTOCOL="udpin"
+HOST="localhost"
+PORT='14540'
+DEVICE=PROTOCOL+":"+HOST+":"+PORT
+DIALECT="common" #common, standard
+MAVLINK_20="0"
+MAVLINK_MDEF="0"
 
 # Start a connection listening on a port
-os.environ["MAVLINK_DIALECT"] = dialect
-os.environ["MAVLINK20"] = mavlink_20
-os.environ["MDEF"] = mavlink_mdef
-connection = mavutil.mavlink_connection(device, dialect)
+os.environ["MAVLINK_DIALECT"] = DIALECT
+os.environ["MAVLINK20"] = MAVLINK_20
+os.environ["MDEF"] = MAVLINK_MDEF
+connection = mavutil.mavlink_connection(DEVICE, DIALECT)
 
 # Wait for the first heartbeat
 #   This sets the system and component ID of remote system for the link
 connection.wait_heartbeat()
-print("Heartbeat from system (system %u component %u)" % (connection.target_system, connection.target_component))
+print(f"Heartbeat from system (system {connection.target_system} \
+    component {connection.target_component})")

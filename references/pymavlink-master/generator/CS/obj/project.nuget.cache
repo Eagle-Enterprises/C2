@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "Hg+ZmE/ZPyNBL0DjipflZ+HmvREIGf5HcfmGg3pezoSzdOvWs8nqZkL5LROPMeBy+5/XvWEdYD5/ft6V4+yjfQ==",
+  "success": true,
+  "projectFilePath": "D:\\development-environment\\C2\\references\\pymavlink-master\\generator\\CS\\MAVLink.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\adams_d0h2oae\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\adams_d0h2oae\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.0\\microsoft.netframework.referenceassemblies.1.0.0.nupkg.sha512",
+    "C:\\Users\\adams_d0h2oae\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net461\\1.0.0\\microsoft.netframework.referenceassemblies.net461.1.0.0.nupkg.sha512",
+    "C:\\Users\\adams_d0h2oae\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
+    "C:\\Users\\adams_d0h2oae\\.nuget\\packages\\newtonsoft.json\\13.0.2\\newtonsoft.json.13.0.2.nupkg.sha512",
+    "C:\\Users\\adams_d0h2oae\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.7.0\\system.runtime.compilerservices.unsafe.4.7.0.nupkg.sha512"
+  ],
+  "logs": []
+}
