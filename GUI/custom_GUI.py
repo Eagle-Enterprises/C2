@@ -7,11 +7,8 @@
 ####################################################
 
 """_summary_
-
-Returns:
-    _type_: _description_
 """
-
+    
 from tkinter import StringVar
 import customtkinter
 
