@@ -125,7 +125,7 @@ class App(customtkinter.CTk):
         location_title_label.grid(row=0, column=2, padx=20, pady=20)
         location_value_label = customtkinter.CTkLabel\
             (location_bkg, textvariable=self.location_value,\
-             font=customtkinter.CTkFont(size=14))
+                font=customtkinter.CTkFont(size=14))
         location_value_label.grid(row=0, column=0, padx=20, pady=20)
 
         #Third column
