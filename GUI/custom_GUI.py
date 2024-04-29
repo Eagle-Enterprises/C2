@@ -21,8 +21,13 @@ customtkinter.set_appearance_mode("System")
 # Themes: "blue" (standard), "green", "dark-blue"
 customtkinter.set_default_color_theme("dark-blue")
 
-class App(customtkinter.CTk):
 
+class App(customtkinter.CTk):
+    """
+    Initializes the CAPTURE Target Asset Locator GUI window with layout and variables.
+
+    Sets up the window configuration, grid layout, and variables for location and distance.
+    """
     # Method to initialize and configure the window
     def __init__(self):
         super().__init__()
