@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pylint mavproxy pymavlink pyserial pynmea2
+          pip install pylint mavproxy pymavlink pyserial pynmea2 pygetwindow customtkinter
       - name: Run pylint and extract scores
         id: pylint_with_scores
         run: |
