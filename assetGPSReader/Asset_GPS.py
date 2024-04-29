@@ -68,7 +68,7 @@ def lat_long_converter(latitude, latitude_direction, longitude, longitude_direct
     return f"{lat_string};{long_string}"
 
 
-# TODO Rename this here and in `lat_long_converter`
+# Rename this here and in `lat_long_converter`
 def _extracted_from_lat_long_converter_13(arg0, arg1):
     lat_dd = int(float(arg0) / 100)
     lat_mm = float(arg0) - lat_dd * 100
