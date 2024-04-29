@@ -2,22 +2,19 @@
 #### Eagle Enterprises Proprietary Information  ####
 ####################################################
 #                  DESCRIPTION                     #
-# This code displays the CAPTURE target asset      #
-# information to a GUI.                            #
+# This code displays an OBS placeholder.           #
 ####################################################
 
-import tkinter
-import tkinter.messagebox
 import customtkinter
-from customtkinter import *
-import io
 
 # Set initial appearance mode
-customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
-customtkinter.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
+# Modes: "System" (standard), "Dark", "Light"
+customtkinter.set_appearance_mode("System")
+# Themes: "blue" (standard), "green", "dark-blue"
+customtkinter.set_default_color_theme("dark-blue")
 
 class App(customtkinter.CTk):
-    
+
     # Method to initialize and configure the window
     def __init__(self):
         super().__init__()

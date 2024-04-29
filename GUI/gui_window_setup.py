@@ -1,28 +1,33 @@
-from tkinter import Tk
-from win32gui import SetParent, FindWindow, SetWindowPos
+####################################################
+#### Eagle Enterprises Proprietary Information  ####
+####################################################
+#                  DESCRIPTION                     #
+# This code sets up GUI windows display.           #
+####################################################
+
+import os
 import time
 import subprocess
 import pygetwindow
-import os
 
 # Relative paths to open apps
 # Custom GUI path
-absolute_path = os.path.dirname(__file__)
-custom_gui_path = "customGUI.py"
-custom_gui_full_path = os.path.join(absolute_path, custom_gui_path)
-custom_gui_command = "python "+custom_gui_full_path
+ABSOLUTE_PATH = os.path.dirname(__file__)
+CUSTOM_GUI_PATH = "custom_GUI.py"
+CUSTOM_GUI_FULL_PATH = os.path.join(ABSOLUTE_PATH, CUSTOM_GUI_PATH)
+CUSTOM_GUI_COMMAND = f"python {CUSTOM_GUI_FULL_PATH}"
 # OBS path  # TO-DO: Replace with OBS path
-obs_path = "obs-test-placeholder.py"
-obs_full_path = os.path.join(absolute_path, obs_path)
-obs_command = "python "+obs_full_path
+OBS_PATH = "obs_test_placeholder.py"
+OBS_FULL_PATH = os.path.join(ABSOLUTE_PATH, OBS_PATH)
+OBS_COMMAND = f"python {OBS_FULL_PATH}"
 # Mission Planner  # TO-DO: Replace with OBS path
-mission_planner_path = 'C:\\Program Files (x86)\\Mission Planner\\MissionPlanner.exe'
+MISSION_PLANNER_PATH = 'C:\\Program Files (x86)\\Mission Planner\\MissionPlanner.exe'
 
 
 # Open Mission Planner and Custom GUI
-subprocess.Popen(custom_gui_command)
-subprocess.Popen(mission_planner_path)
-subprocess.Popen(obs_command)
+subprocess.Popen(CUSTOM_GUI_COMMAND)
+subprocess.Popen(MISSION_PLANNER_PATH)
+subprocess.Popen(OBS_COMMAND)
 
 
 # Give child processes enough time to launch
@@ -42,7 +47,7 @@ videoFeed = pygetwindow.getWindowsWithTitle("OBS")[0]
 
 #resize the window
 customGUI.resizeTo(1380, 175)
-customGUI.moveTo(-7, 0) 
+customGUI.moveTo(-7, 0)
 missionPlanner.resizeTo(997, 563)
 missionPlanner.moveTo(-7, 167)
 videoFeed.resizeTo(397, 563)
