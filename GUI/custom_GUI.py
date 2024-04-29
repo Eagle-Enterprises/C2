@@ -15,6 +15,20 @@ Returns:
 from tkinter import StringVar
 import customtkinter
 
+# CONSTANTS and variables
+# Distance used only for initial tests
+EXAMPLE_DISTANCE=0
+#EXAMPLE_DISTANCE=190
+# Location used only for initial tests
+GPS_EXAMPLE_LOCATION=""
+#GPS_EXAMPLE_LOCATION="38.924144999999996;94.76678500000001"
+HEIGHT = 140
+X_POS = -7
+Y_POS = 0
+INITIAL_LOCATION=""
+INITIAL_DISTANCE=""
+
+
 # Set initial appearance mode
 # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_appearance_mode("System")
@@ -29,25 +43,24 @@ class App(customtkinter.CTk):
     """
     # Method to initialize and configure the window
     def __init__(self):
-        super().__init__()
         """
         Initializes the CAPTURE Target Asset Locator GUI window with layout and variables.
 
-        Window configuration, grid layout, variables for location and distance, and widget 
+        Window configuration, grid layout, variables for location and distance, and widget
         placements are set up.
-        
+
         Args:
             None
 
         Returns:
             None
         """
+
+        super().__init__()
+
         # Window configuration
-        height = 140
-        x_pos = -7
-        y_pos = 0
-        width = self.winfo_screenwidth() - x_pos
-        self.geometry(f'{width}x{height}+{x_pos}+{y_pos}')
+        width = self.winfo_screenwidth() - X_POS
+        self.geometry(f'{width}x{HEIGHT}+{X_POS}+{Y_POS}')
         self.title("CAPTURE Target Asset Locator")
         #self.geometry(f"{1380}x{140}")
 
@@ -63,28 +76,17 @@ class App(customtkinter.CTk):
         # Location
         initial_location_label_content="Calculating target position…"
         self.final_location_label_content="Target found at:"
-        initial_location=""
         self.location_label_content = StringVar()
         self.location_label_content.set(initial_location_label_content)
-        self.location_value = StringVar()
-        self.location_value.set(initial_location)
-
-        # Location used only for initial tests
-        gps_example_location=""
-        #gps_example_location="38.924144999999996;94.76678500000001"
+        self.location_value = StringVar(INITIAL_LOCATION)
 
         # Distance
         initial_distance_label_content="Calculating target distance..."
         self.final_distance_label_content="Distance form Target:"
-        initial_distance=""
         self.distance_label_content = StringVar()
         self.distance_label_content.set(initial_distance_label_content)
         self.distance_value = StringVar()
-        self.distance_value.set(initial_distance)
-
-        # Distance used only for initial tests
-        example_distance=0
-        #example_distance=190
+        self.distance_value.set(INITIAL_DISTANCE)
 
         #First column
 
@@ -103,8 +105,8 @@ class App(customtkinter.CTk):
             (sidebar_frame, text="Appearance Mode:", anchor="w")
         appearance_mode_label.grid(row=1, column=0, padx=20, pady=(10, 0))
         appearance_mode_optionemenu = customtkinter.CTkOptionMenu\
-            (sidebar_frame, values=["Light", "Dark", "System"],
-        command=self.change_appearance_mode_event)
+            (sidebar_frame, values=["Light", "Dark", "System"],\
+            command=self.change_appearance_mode_event)
         appearance_mode_optionemenu.grid(row=2, column=0, padx=20, pady=(0, 10))
 
         # Default value for appearance
@@ -121,7 +123,7 @@ class App(customtkinter.CTk):
         # Asset Location title and value
         location_title_label = customtkinter.CTkLabel\
             (self, textvariable=self.location_label_content, font=customtkinter.CTkFont\
-                (size=14, weight="bold"), justify="center", anchor="w")
+            (size=14, weight="bold"), justify="center", anchor="w")
         location_title_label.grid(row=0, column=2, padx=20, pady=20)
         location_value_label = customtkinter.CTkLabel\
             (location_bkg, textvariable=self.location_value,\
@@ -148,8 +150,8 @@ class App(customtkinter.CTk):
 
         # Update location and distance. Code to obtain location and distance \
             # to be added once integrated with sensors.
-        self.update_asset_location(gps_example_location)
-        self.update_asset_distance(example_distance)
+        self.update_asset_location(GPS_EXAMPLE_LOCATION)
+        self.update_asset_distance(EXAMPLE_DISTANCE)
         #self.update() # Not sure if needed
 
     # Method to change appearance
