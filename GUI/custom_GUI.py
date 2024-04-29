@@ -8,7 +8,7 @@
 
 """_summary_
 """
-    
+
 from tkinter import StringVar
 import customtkinter
 
