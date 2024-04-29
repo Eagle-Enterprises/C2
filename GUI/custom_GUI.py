@@ -21,7 +21,6 @@ customtkinter.set_appearance_mode("System")
 # Themes: "blue" (standard), "green", "dark-blue"
 customtkinter.set_default_color_theme("dark-blue")
 
-
 class App(customtkinter.CTk):
     """
     Initializes the CAPTURE Target Asset Locator GUI window with layout and variables.
@@ -34,7 +33,8 @@ class App(customtkinter.CTk):
         """
         Initializes the CAPTURE Target Asset Locator GUI window with layout and variables.
 
-        Window configuration, grid layout, variables for location and distance, and widget placements are set up.
+        Window configuration, grid layout, variables for location and distance, and widget 
+        placements are set up.
         
         Args:
             None
@@ -61,26 +61,26 @@ class App(customtkinter.CTk):
         # Variables and constants
 
         # Location
-        self.initial_location_label_content="Calculating target position…"
+        initial_location_label_content="Calculating target position…"
         self.final_location_label_content="Target found at:"
-        self.initial_location=""
+        initial_location=""
         self.location_label_content = StringVar()
-        self.location_label_content.set(self.initial_location_label_content)
+        self.location_label_content.set(initial_location_label_content)
         self.location_value = StringVar()
-        self.location_value.set(self.initial_location)
+        self.location_value.set(initial_location)
 
         # Location used only for initial tests
         gps_example_location=""
         #gps_example_location="38.924144999999996;94.76678500000001"
 
         # Distance
-        self.initial_distance_label_content="Calculating target distance..."
+        initial_distance_label_content="Calculating target distance..."
         self.final_distance_label_content="Distance form Target:"
-        self.initial_distance=""
+        initial_distance=""
         self.distance_label_content = StringVar()
-        self.distance_label_content.set(self.initial_distance_label_content)
+        self.distance_label_content.set(initial_distance_label_content)
         self.distance_value = StringVar()
-        self.distance_value.set(self.initial_distance)
+        self.distance_value.set(initial_distance)
 
         # Distance used only for initial tests
         example_distance=0
@@ -89,62 +89,62 @@ class App(customtkinter.CTk):
         #First column
 
         # Sidebar frame with widgets
-        self.sidebar_frame = customtkinter.CTkFrame(self, width=140, corner_radius=0)
-        self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
+        sidebar_frame = customtkinter.CTkFrame(self, width=140, corner_radius=0)
+        sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
         #self.sidebar_frame.grid_rowconfigure(3, weight=1)
 
         # Label inside sidebar
-        self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="CAPTURE Target",\
+        logo_label = customtkinter.CTkLabel(sidebar_frame, text="CAPTURE Target",\
             font=customtkinter.CTkFont(size=20, weight="bold"))
-        self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 10))
+        logo_label.grid(row=0, column=0, padx=20, pady=(20, 10))
 
         # Appearance menu
-        self.appearance_mode_label = customtkinter.CTkLabel\
-            (self.sidebar_frame, text="Appearance Mode:", anchor="w")
-        self.appearance_mode_label.grid(row=1, column=0, padx=20, pady=(10, 0))
-        self.appearance_mode_optionemenu = customtkinter.CTkOptionMenu\
-            (self.sidebar_frame, values=["Light", "Dark", "System"],
+        appearance_mode_label = customtkinter.CTkLabel\
+            (sidebar_frame, text="Appearance Mode:", anchor="w")
+        appearance_mode_label.grid(row=1, column=0, padx=20, pady=(10, 0))
+        appearance_mode_optionemenu = customtkinter.CTkOptionMenu\
+            (sidebar_frame, values=["Light", "Dark", "System"],
         command=self.change_appearance_mode_event)
-        self.appearance_mode_optionemenu.grid(row=2, column=0, padx=20, pady=(0, 10))
+        appearance_mode_optionemenu.grid(row=2, column=0, padx=20, pady=(0, 10))
 
         # Default value for appearance
-        self.appearance_mode_optionemenu.set("Dark")
+        appearance_mode_optionemenu.set("Dark")
 
         # Second column
 
         # Placeholder behind asset location
-        self.location_bkg = customtkinter.CTkFrame(self)
-        self.location_bkg.grid(row=1, column=2, padx=(20, 0), pady=(10, 20), sticky="nsew")
-        self.location_bkg.rowconfigure(0, weight=1)
-        self.location_bkg.columnconfigure(0, weight=1)
+        location_bkg = customtkinter.CTkFrame(self)
+        location_bkg.grid(row=1, column=2, padx=(20, 0), pady=(10, 20), sticky="nsew")
+        location_bkg.rowconfigure(0, weight=1)
+        location_bkg.columnconfigure(0, weight=1)
 
         # Asset Location title and value
-        self.location_title_label = customtkinter.CTkLabel\
+        location_title_label = customtkinter.CTkLabel\
             (self, textvariable=self.location_label_content, font=customtkinter.CTkFont\
                 (size=14, weight="bold"), justify="center", anchor="w")
-        self.location_title_label.grid(row=0, column=2, padx=20, pady=20)
-        self.location_value_label = customtkinter.CTkLabel\
-            (self.location_bkg, textvariable=self.location_value,\
+        location_title_label.grid(row=0, column=2, padx=20, pady=20)
+        location_value_label = customtkinter.CTkLabel\
+            (location_bkg, textvariable=self.location_value,\
              font=customtkinter.CTkFont(size=14))
-        self.location_value_label.grid(row=0, column=0, padx=20, pady=20)
+        location_value_label.grid(row=0, column=0, padx=20, pady=20)
 
         #Third column
 
         # Placeholder behind distance
-        self.distance_bkg = customtkinter.CTkFrame(self)
-        self.distance_bkg.grid(row=1, column=4, padx=(20, 20), pady=(10, 20), sticky="nsew")
-        self.distance_bkg.rowconfigure(0, weight=1)
-        self.distance_bkg.columnconfigure(0, weight=1)
+        distance_bkg = customtkinter.CTkFrame(self)
+        distance_bkg.grid(row=1, column=4, padx=(20, 20), pady=(10, 20), sticky="nsew")
+        distance_bkg.rowconfigure(0, weight=1)
+        distance_bkg.columnconfigure(0, weight=1)
 
         # Asset Distance title and Value
-        self.asset_distance_title_label = customtkinter.CTkLabel\
+        asset_distance_title_label = customtkinter.CTkLabel\
             (self, textvariable=self.distance_label_content,\
                 font=customtkinter.CTkFont(size=14, weight="bold"), justify="center", anchor="w")
-        self.asset_distance_title_label.grid(row=0, column=4, padx=20, pady=20)
-        self.asset_distance_label = customtkinter.CTkLabel\
-            (self.distance_bkg, textvariable=self.distance_value,\
+        asset_distance_title_label.grid(row=0, column=4, padx=20, pady=20)
+        asset_distance_label = customtkinter.CTkLabel\
+            (distance_bkg, textvariable=self.distance_value,\
                 font=customtkinter.CTkFont(size=14))
-        self.asset_distance_label.grid(row=0, column=0, padx=20, pady=20)
+        asset_distance_label.grid(row=0, column=0, padx=20, pady=20)
 
         # Update location and distance. Code to obtain location and distance \
             # to be added once integrated with sensors.

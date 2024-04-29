@@ -32,11 +32,11 @@ MISSION_PLANNER_PATH = 'C:\\Program Files (x86)\\Mission Planner\\MissionPlanner
 
 # Open Mission Planner and Custom GUI
 with subprocess.Popen(CUSTOM_GUI_COMMAND) as p:
-        time.sleep(0.1)
+    time.sleep(0.1)
 with subprocess.Popen(MISSION_PLANNER_PATH) as p:
-        time.sleep(0.1)
+    time.sleep(0.1)
 with subprocess.Popen(OBS_COMMAND) as p:
-        time.sleep(0.1)
+    time.sleep(0.1)
 
 # Give child processes enough time to launch
 time.sleep(10)
