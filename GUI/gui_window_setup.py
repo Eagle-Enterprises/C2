@@ -13,7 +13,7 @@ import pygetwindow
 # Relative paths to open apps
 # Custom GUI path
 ABSOLUTE_PATH = os.path.dirname(__file__)
-CUSTOM_GUI_PATH = "custom_GUI.py"
+CUSTOM_GUI_PATH = "custom_gui.py"
 CUSTOM_GUI_FULL_PATH = os.path.join(ABSOLUTE_PATH, CUSTOM_GUI_PATH)
 CUSTOM_GUI_COMMAND = f"python {CUSTOM_GUI_FULL_PATH}"
 # OBS path  # TO-DO: Replace with OBS path

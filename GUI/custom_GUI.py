@@ -26,7 +26,7 @@ class App(customtkinter.CTk):
         x_pos = -7
         y_pos = 0
         width = self.winfo_screenwidth() - x_pos
-        self.geometry('%dx%d+%d+%d' % (width, height, x_pos, y_pos))
+        self.geometry(f'{width}x{height}+{x_pos}+{y_pos}')
         self.title("CAPTURE Target Asset Locator")
         #self.geometry(f"{1380}x{140}")
 

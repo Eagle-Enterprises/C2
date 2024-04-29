@@ -24,7 +24,7 @@ class App(customtkinter.CTk):
         x_pos = 0
         y_pos = 0
         width = 400
-        self.geometry('%dx%d+%d+%d' % (width, height, x_pos, y_pos))
+        self.geometry(f'{width}x{height}+{x_pos}+{y_pos}')
         self.title("OBS Test Placeholder")
         #self.geometry(f"{1380}x{140}")
 
