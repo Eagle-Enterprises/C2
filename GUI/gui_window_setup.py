@@ -5,6 +5,12 @@
 # This code sets up GUI windows display.           #
 ####################################################
 
+"""_summary_
+
+Returns:
+    _type_: _description_
+"""
+
 import os
 import time
 import subprocess

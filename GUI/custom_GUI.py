@@ -6,6 +6,12 @@
 # information to a GUI.                            #
 ####################################################
 
+"""_summary_
+
+Returns:
+    _type_: _description_
+"""
+
 from tkinter import StringVar
 import customtkinter
 
@@ -20,7 +26,17 @@ class App(customtkinter.CTk):
     # Method to initialize and configure the window
     def __init__(self):
         super().__init__()
+        """
+        Initializes the CAPTURE Target Asset Locator GUI window with layout and variables.
 
+        Window configuration, grid layout, variables for location and distance, and widget placements are set up.
+        
+        Args:
+            None
+
+        Returns:
+            None
+        """
         # Window configuration
         height = 140
         x_pos = -7
@@ -133,10 +149,32 @@ class App(customtkinter.CTk):
 
     # Method to change appearance
     def change_appearance_mode_event(self, new_appearance_mode: str):
+        """
+        Changes the appearance mode of the GUI to the specified mode.
+
+        Sets the appearance mode of the GUI to the provided mode.
+
+        Args:
+            new_appearance_mode (str): The new appearance mode to set.
+
+        Returns:
+            None
+        """
         customtkinter.set_appearance_mode(new_appearance_mode)
 
     # Method to update location
     def update_asset_location(self, location: str):
+        """
+        Updates the displayed asset location based on the provided location string.
+
+        If a non-empty location string is provided, updates the location label content and value.
+
+        Args:
+            location (str): The location string to update and display.
+
+        Returns:
+            None
+        """
         if location != "":
             self.location_label_content.set(self.final_location_label_content)
             self.location_value.set(location)
@@ -145,6 +183,17 @@ class App(customtkinter.CTk):
 
     # Method to update distance
     def update_asset_distance(self, distance: int):
+        """
+        Updates the displayed asset distance if the provided distance is greater than 0.
+
+        If the distance is positive, sets the distance label content and value accordingly.
+
+        Args:
+            distance (int): The distance value to update and display.
+
+        Returns:
+            None
+        """
         if distance > 0:
             self.distance_label_content.set(self.final_distance_label_content)
             self.distance_value.set(f"{distance} ft.")

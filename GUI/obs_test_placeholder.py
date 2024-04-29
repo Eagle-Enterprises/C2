@@ -5,6 +5,12 @@
 # This code displays an OBS placeholder.           #
 ####################################################
 
+"""_summary_
+
+Returns:
+    _type_: _description_
+"""
+
 import customtkinter
 
 # Set initial appearance mode
@@ -14,9 +20,32 @@ customtkinter.set_appearance_mode("System")
 customtkinter.set_default_color_theme("dark-blue")
 
 class App(customtkinter.CTk):
+    """
+    Initializes the OBS Test Placeholder GUI window with specific configuration.
+
+    Sets up the window size, position, and title for the OBS Test Placeholder application.
+    
+    Args:
+        None
+
+    Returns:
+        None
+    """
 
     # Method to initialize and configure the window
     def __init__(self):
+        """
+        Initializes the OBS Test Placeholder GUI window with specific configuration.
+
+        Sets up the window size, position, and title for the OBS Test Placeholder application.
+        
+        Args:
+            None
+
+        Returns:
+            None
+        """
+
         super().__init__()
 
         # Window configuration
