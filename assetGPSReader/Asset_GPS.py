@@ -59,25 +59,29 @@ def lat_long_converter(latitude, latitude_direction, longitude, longitude_direct
     Returns:
         _type_: _description_
     """
-    lat_dd = int(float(latitude)/100)
-    lat_mm = float(latitude) - lat_dd * 100
-    lat_multiplier = int(1 if latitude_direction in ['N', 'E'] else -1)
-    lat_decimal = lat_multiplier * (lat_dd + lat_mm/60)
-    lat_string = str(lat_decimal)
-    long_dd = int(float(longitude)/100)
-    long_mm = float(longitude) - long_dd * 100
-    long_multiplier = int(1 if longitude_direction in ['N', 'E'] else -1)
-    long_decimal = long_multiplier * (long_dd + long_mm/60)
-    long_string = str(long_decimal)
+    lat_string = _extracted_from_lat_long_converter_13(
+        latitude, latitude_direction
+    )
+    long_string = _extracted_from_lat_long_converter_13(
+        longitude, longitude_direction
+    )
+    return f"{lat_string};{long_string}"
 
-    return lat_string+";"+long_string
+
+# Rename this here and in `lat_long_converter`
+def _extracted_from_lat_long_converter_13(arg0, arg1):
+    lat_dd = int(float(arg0) / 100)
+    lat_mm = float(arg0) - lat_dd * 100
+    lat_multiplier = 1 if arg1 in ['N', 'E'] else -1
+    lat_decimal = lat_multiplier * (lat_dd + lat_mm/60)
+    return str(lat_decimal)
 
 # Read COM PORT and update window display
 while True:
     try:
         NMEA_PARSED = pynmea2.parse(GPS_SERIAL_PORT.readline().decode('ascii', errors='replace'))
-        COORDINATES = lat_long_converter(NMEA_PARSED.lat, NMEA_PARSED.lat_dir,
-                                         NMEA_PARSED.lon, NMEA_PARSED.lon_dir)
+        COORDINATES = lat_long_converter(NMEA_PARSED.lat, NMEA_PARSED.lat_dir,\
+            NMEA_PARSED.lon, NMEA_PARSED.lon_dir)
         ASSET_LOCATION.set(COORDINATES)
     except Exception as e:
         TEXT="Gathering Asset Location"
