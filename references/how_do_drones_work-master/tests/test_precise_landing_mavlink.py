@@ -52,7 +52,7 @@ def send_land_message_v2(x_rad=0, y_rad=0, dist_m=0, x_m=0,y_m=0,z_m=0, time_use
         2,          # type of landing target: 2 = Fiducial marker
         1,          # position_valid boolean
     )
-    print(msg)
+    print msg
     vehicle.send_mavlink(msg)
 
     
@@ -67,9 +67,9 @@ def send_land_message_v1(x_rad=0, y_rad=0, dist_m=0, time_usec=0, target_num=0):
         0,          # Target x-axis size, in radians
         0,          # Target y-axis size, in radians
     )
-    print(msg)
+    print msg
     vehicle.send_mavlink(msg)
-
+  
         
 # Define function to send distance_message mavlink message for mavlink based rangefinder, must be >10hz
 # http://mavlink.org/messages/common#DISTANCE_SENSOR
@@ -141,7 +141,7 @@ aruco_tracker       = ArucoSingleTracker(id_to_find=72, marker_size=4, show_vide
 time_0 = time.time()
 
 #--- Check mavlink standard
-mavlink20 = 'MAVLINK20' in os.environ
+mavlink20 = 'MAVLINK20' in os.environ:
 
 while True:                
 
@@ -153,7 +153,7 @@ while True:
         
         if time.time() >= time_0 + 1.0/freq_send:
             time_0 = time.time()
-            print("Marker found x = %5.0f cm  y = %5.0f cm -> angle_x = %5f  angle_y = %5f"%(x_cm, y_cm, angle_x, angle_y))
+            print "Marker found x = %5.0f cm  y = %5.0f cm -> angle_x = %5f  angle_y = %5f"%(x_cm, y_cm, angle_x, angle_y)
             # send_land_message(x_m=x_cm*0.01, y_m=y_cm*0.01, z_m=z_cm*0.01)
             if mavlink20:
                 send_land_message_v2(x_rad=angle_x, y_rad=angle_y, dist_m=z_cm*0.01, time_usec=time.time()*1e6)

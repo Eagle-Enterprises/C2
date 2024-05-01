@@ -20,26 +20,26 @@ from pymavlink import mavutil
 #-- Define arm and takeoff
 def arm_and_takeoff(altitude):
 
-    while not vehicle.is_armable:
-        print("waiting to be armable")
-        time.sleep(1)
+   while not vehicle.is_armable:
+      print("waiting to be armable")
+      time.sleep(1)
 
-    print("Arming motors")
-    vehicle.mode = VehicleMode("GUIDED")
-    vehicle.armed = True
+   print("Arming motors")
+   vehicle.mode = VehicleMode("GUIDED")
+   vehicle.armed = True
 
-    while not vehicle.armed: time.sleep(1)
+   while not vehicle.armed: time.sleep(1)
 
-    print("Taking Off")
-    vehicle.simple_takeoff(altitude)
+   print("Taking Off")
+   vehicle.simple_takeoff(altitude)
 
-    while True:
-        v_alt = vehicle.location.global_relative_frame.alt
-        print(">> Altitude = %.1f m"%v_alt)
-        if v_alt >= altitude - 1.0:
-            print("Target altitude reached")
-            break
-        time.sleep(1)
+   while True:
+      v_alt = vehicle.location.global_relative_frame.alt
+      print(">> Altitude = %.1f m"%v_alt)
+      if v_alt >= altitude - 1.0:
+          print("Target altitude reached")
+          break
+      time.sleep(1)
 
 def clear_mission(vehicle):
     """
@@ -76,7 +76,7 @@ def get_current_mission(vehicle):
         n_wp, wpList
     """
 
-    print("Downloading mission")
+    print "Downloading mission"
     download_mission(vehicle)
     missionList = []
     n_WP        = 0

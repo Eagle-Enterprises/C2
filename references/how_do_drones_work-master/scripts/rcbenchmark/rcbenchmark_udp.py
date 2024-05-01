@@ -8,10 +8,10 @@ UDP_PORT_WRITE = 55047
 UDP_PORT_READ  = 64126
 
 sock_write = socket.socket(socket.AF_INET, # Internet
-    socket.SOCK_DGRAM) # UDP
+                     socket.SOCK_DGRAM) # UDP
 
 sock_read = socket.socket(socket.AF_INET, # Internet
-    socket.SOCK_DGRAM) # UDP
+                     socket.SOCK_DGRAM) # UDP
 sock_read.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 sock_read.bind((UDP_IP, UDP_PORT_READ))
 data_received = {}

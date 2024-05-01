@@ -21,28 +21,28 @@ gnd_speed = 5 # [m/s]
 #-- Define arm and takeoff
 def arm_and_takeoff(altitude):
 
-    while not vehicle.is_armable:
-        print("waiting to be armable")
-        time.sleep(1)
+   while not vehicle.is_armable:
+      print("waiting to be armable")
+      time.sleep(1)
 
-    print("Arming motors")
-    vehicle.mode = VehicleMode("GUIDED")
-    vehicle.armed = True
+   print("Arming motors")
+   vehicle.mode = VehicleMode("GUIDED")
+   vehicle.armed = True
 
-    while not vehicle.armed: time.sleep(1)
+   while not vehicle.armed: time.sleep(1)
 
-    print("Taking Off")
-    vehicle.simple_takeoff(altitude)
+   print("Taking Off")
+   vehicle.simple_takeoff(altitude)
 
-    while True:
-        v_alt = vehicle.location.global_relative_frame.alt
-        print(">> Altitude = %.1f m"%v_alt)
-        if v_alt >= altitude - 1.0:
-            print("Target altitude reached")
-            break
-        time.sleep(1)
-        
-#-- Define the function for sending mavlink velocity command in body frame
+   while True:
+      v_alt = vehicle.location.global_relative_frame.alt
+      print(">> Altitude = %.1f m"%v_alt)
+      if v_alt >= altitude - 1.0:
+          print("Target altitude reached")
+          break
+      time.sleep(1)
+      
+ #-- Define the function for sending mavlink velocity command in body frame
 def set_velocity_body(vehicle, vx, vy, vz):
     """ Remember: vz is positive downward!!!
     http://ardupilot.org/dev/docs/copter-commands-in-guided-mode.html

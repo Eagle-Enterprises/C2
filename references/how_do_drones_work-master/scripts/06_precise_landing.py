@@ -52,7 +52,7 @@ def get_location_metres(original_location, dNorth, dEast):
     dLat = dNorth/earth_radius
     dLon = dEast/(earth_radius*math.cos(math.pi*original_location.lat/180))
     
-    print("dlat, dlon"), dLat, dLon
+    print "dlat, dlon", dLat, dLon
 
     #New position in decimal degrees
     newlat = original_location.lat + (dLat * 180/math.pi)
@@ -139,24 +139,24 @@ while True:
         if time.time() >= time_0 + 1.0/freq_send:
             time_0 = time.time()
             # print ""
-            print(" ")
-            print("Altitude = %.0fcm"%z_cm)
-            print("Marker found x = %5.0f cm  y = %5.0f cm -> angle_x = %5f  angle_y = %5f"%(x_cm, y_cm, angle_x*rad_2_deg, angle_y*rad_2_deg))
+            print " "
+            print "Altitude = %.0fcm"%z_cm
+            print "Marker found x = %5.0f cm  y = %5.0f cm -> angle_x = %5f  angle_y = %5f"%(x_cm, y_cm, angle_x*rad_2_deg, angle_y*rad_2_deg)
             
             north, east             = uav_to_ne(x_cm, y_cm, vehicle.attitude.yaw)
-            print("Marker N = %5.0f cm   E = %5.0f cm   Yaw = %.0f deg"%(north, east, vehicle.attitude.yaw*rad_2_deg))
+            print "Marker N = %5.0f cm   E = %5.0f cm   Yaw = %.0f deg"%(north, east, vehicle.attitude.yaw*rad_2_deg)
             
             marker_lat, marker_lon  = get_location_metres(uav_location, north*0.01, east*0.01)  
             #-- If angle is good, descend
             if check_angle_descend(angle_x, angle_y, angle_descend):
-                print("Low error: descending")
+                print "Low error: descending"
                 location_marker         = LocationGlobalRelative(marker_lat, marker_lon, uav_location.alt-(land_speed_cms*0.01/freq_send))
             else:
                 location_marker         = LocationGlobalRelative(marker_lat, marker_lon, uav_location.alt)
                 
             vehicle.simple_goto(location_marker)
-            print("UAV Location    Lat = %.7f  Lon = %.7f"%(uav_location.lat, uav_location.lon))
-            print("Commanding to   Lat = %.7f  Lon = %.7f"%(location_marker.lat, location_marker.lon))
+            print "UAV Location    Lat = %.7f  Lon = %.7f"%(uav_location.lat, uav_location.lon)
+            print "Commanding to   Lat = %.7f  Lon = %.7f"%(location_marker.lat, location_marker.lon)
             
         #--- COmmand to land
         if z_cm <= land_alt_cm:

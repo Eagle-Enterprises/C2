@@ -227,13 +227,13 @@ class Plane():
         #-- save the mission: copy in the memory
         tmp_mission = list(self.mission)
         
-        print(tmp_mission.count)
+        print tmp_mission.count
         is_mission  = False
         if len(tmp_mission) >= 1:
             is_mission = True
             print("Current mission:")
             for item in tmp_mission:
-                print(item)
+                print item
             #-- If takeoff already in the mission, do not do anything
             
         if is_mission and tmp_mission[0].command == mavutil.mavlink.MAV_CMD_NAV_TAKEOFF:
@@ -338,9 +338,9 @@ class Plane():
         
         """
         tgt = self.get_target_from_bearing(original_location=self.location_current, 
-            ang=math.radians(angle_deg), 
-            dist=5000,
-            altitude=altitude)
+                                             ang=math.radians(angle_deg), 
+                                             dist=5000,
+                                             altitude=altitude)
         return(tgt)
         
     def goto(self, location):

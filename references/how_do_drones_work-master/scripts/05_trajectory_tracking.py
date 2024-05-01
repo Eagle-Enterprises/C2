@@ -33,28 +33,28 @@ connection_string = args.connect
 #-- Define arm and takeoff
 def arm_and_takeoff(altitude):
 
-    while not vehicle.is_armable:
-        print("waiting to be armable")
-        time.sleep(1)
+   while not vehicle.is_armable:
+      print("waiting to be armable")
+      time.sleep(1)
 
-    print("Arming motors")
-    vehicle.mode = VehicleMode("GUIDED")
-    vehicle.armed = True
+   print("Arming motors")
+   vehicle.mode = VehicleMode("GUIDED")
+   vehicle.armed = True
 
-    while not vehicle.armed: time.sleep(1)
+   while not vehicle.armed: time.sleep(1)
 
-    print("Taking Off")
-    vehicle.simple_takeoff(altitude)
+   print("Taking Off")
+   vehicle.simple_takeoff(altitude)
 
-    while True:
-        v_alt = vehicle.location.global_relative_frame.alt
-        print(">> Altitude = %.1f m"%v_alt)
-        if v_alt >= altitude - 1.0:
-            print("Target altitude reached")
-            break
-        time.sleep(1)
+   while True:
+      v_alt = vehicle.location.global_relative_frame.alt
+      print(">> Altitude = %.1f m"%v_alt)
+      if v_alt >= altitude - 1.0:
+          print("Target altitude reached")
+          break
+      time.sleep(1)
 
-#-- Define the function for sending mavlink velocity command in body frame
+ #-- Define the function for sending mavlink velocity command in body frame
 def set_velocity_body(vehicle, vx, vy, vz):
     """ Remember: vz is positive downward!!!
     http://ardupilot.org/dev/docs/copter-commands-in-guided-mode.html
@@ -116,7 +116,7 @@ def get_current_mission(vehicle):
         n_wp, wpList
     """
 
-    print("Downloading mission")
+    print "Downloading mission"
     download_mission(vehicle)
     missionList = []
     n_WP        = 0
@@ -297,7 +297,7 @@ while True:
         dist_2_wp   = distance_to_current_waypoint(vehicle)
         
         try:
-            print("bearing  %.0f  dist = %.0f"%(bearing*180.0/3.14, dist_2_wp))
+            print "bearing  %.0f  dist = %.0f"%(bearing*180.0/3.14, dist_2_wp)
             heading = add_angles(bearing,-direction*0.5*math.pi)
             #print heading*180.0/3.14
             condition_yaw(heading*180/3.14)
@@ -305,11 +305,11 @@ while True:
             v_x     = gnd_speed
             v_y     = -direction*k_err_vel*(radius - dist_2_wp)
             v_y     = saturate(v_y, -max_lat_speed, max_lat_speed)
-            print("v_x = %.1f  v_y = %.1f"%(v_x, v_y))
+            print "v_x = %.1f  v_y = %.1f"%(v_x, v_y)
             set_velocity_body(vehicle, v_x, v_y, 0.0)
             
         except Exception as e:
-            print(e)
+            print e
 
 
         if time.time() > time0 + time_flight: 

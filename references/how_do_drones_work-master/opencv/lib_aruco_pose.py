@@ -183,7 +183,7 @@ class ArucoSingleTracker():
                 pos_camera = -R_tc*np.matrix(tvec).T
                 
                 # print "Camera X = %.1f  Y = %.1f  Z = %.1f  - fps = %.0f"%(pos_camera[0], pos_camera[1], pos_camera[2],fps_detect)
-                if verbose: print("Marker X = %.1f  Y = %.1f  Z = %.1f  - fps = %.0f"%(tvec[0], tvec[1], tvec[2],self.fps_detect))
+                if verbose: print "Marker X = %.1f  Y = %.1f  Z = %.1f  - fps = %.0f"%(tvec[0], tvec[1], tvec[2],self.fps_detect)
 
                 if show_video:
 
@@ -207,7 +207,7 @@ class ArucoSingleTracker():
 
 
             else:
-                if verbose: print("Nothing detected - fps = %.0f"%self.fps_read)
+                if verbose: print "Nothing detected - fps = %.0f"%self.fps_read
             
 
             if show_video:
