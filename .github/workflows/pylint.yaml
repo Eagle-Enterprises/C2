@@ -1,0 +1,36 @@
+name: Pylint
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pylint mavproxy pymavlink pyserial pynmea2 pygetwindow customtkinter
+      - name: Run pylint and extract scores
+        id: pylint_with_scores
+        run: |
+          pylint --output-format=parseable --ignore=references,test/examples,GUI/CAPTURE.bat,GUI/eagle.ico **/*.py | tee pylint_output.txt || true
+          scores=$(grep -oP 'rated at \K[0-9.]+' pylint_output.txt | awk '{s+=$1} END {print s/NR}')
+          echo "::set-output name=scores::$scores"
+      - name: Check pylint overall score
+        run: |
+          scores=${{ steps.pylint_with_scores.outputs.scores }}
+          if (( $(echo "$scores > 9" | bc -l) )); then
+            echo "Overall Pylint score is above 9/10"
+            exit 0
+          else
+            echo "Overall Pylint score is below 9/10 or there were pylint errors"
+            exit 1
+          fi

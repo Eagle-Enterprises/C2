@@ -1,8 +1,11 @@
-## MAVLink Communication in Swift
+# MAVLink Communication in Swift
 
 This folder contains Swift files used to generate MAVLink Swift Library.
 
-Generated code allows to decode and encode MAVLink Messages into/from specially auto-generated Swift structs and enums according to specific MAVLink XML definition file. It was built from the ground up in Swift utilizing type safety, generics, throwing and other language features to make library more reliable.
+Generated code allows to decode and encode MAVLink Messages into/from specially
+auto-generated Swift structs and enums according to specific MAVLink XML
+definition file. It was built from the ground up in Swift utilizing type safety,
+generics, throwing and other language features to make library more reliable.
 
 Current Swift implementation supports only first version of MAVLink protocol.
 
@@ -29,12 +32,14 @@ To generate MAVLink Swift Library for specific flight controller or specific fir
 
 MAVLink Swift Library doesn't contain any external dependencies.
 
-#### Manually
+### Manually
+
 1. Download all files from `Sources` subfolder
 2. Drop downloaded files into your project
-3. Congratulations!  
+3. Congratulations!
 
 #### Swift Package Manager (From Pre-generated Repository)
+
 You can use Swift Package Manager to install MAVLink Swift Library by adding it to your `Package.swift` file:
 
 ```swift
@@ -46,8 +51,8 @@ let package = Package(
 )
 ```
 
-```
-$ swift build
+```bash
+swift build
 ```
 
 Tested with swift build --version: 3.0.2 (swiftpm-11750)
@@ -69,20 +74,27 @@ mavLink.parse(data: data, channel: 0) { message, _ in
 
 Output:
 
-```
+```swift
 ATTITUDE: The attitude in the aeronautical frame (right-handed, Z-down, X-front, Y-right).
 Fields:
-	timeBootMs = 72062 : Timestamp (milliseconds since system boot)
-	roll = -0.0695389 : Roll angle (rad, -pi..+pi)
-	pitch = 0.0272282 : Pitch angle (rad, -pi..+pi)
-	yaw = 1.11595 : Yaw angle (rad, -pi..+pi)
-	rollspeed = -0.0208449 : Roll angular speed (rad/s)
-	pitchspeed = 0.00913008 : Pitch angular speed (rad/s)
-	yawspeed = 0.00166465 : Yaw angular speed (rad/s)
+ timeBootMs = 72062 : Timestamp (milliseconds since system boot)
+ roll = -0.0695389 : Roll angle (rad, -pi..+pi)
+ pitch = 0.0272282 : Pitch angle (rad, -pi..+pi)
+ yaw = 1.11595 : Yaw angle (rad, -pi..+pi)
+ rollspeed = -0.0208449 : Roll angular speed (rad/s)
+ pitchspeed = 0.00913008 : Pitch angular speed (rad/s)
+ yawspeed = 0.00166465 : Yaw angular speed (rad/s)
 ```
 
 ## Testing
 
-`Tests` folder includes XCode project that you should run to tests generated Swift code. Before running tests you need to execute `./ardugen.sh` script to generate Swift and C code into right subfolders. C code is used to compare output results and ensure that Swift implementation interprets data in the same way. `ardugen.sh` uses `ardupilotmega.xml` definition file from `Tests/MAVLinkTests/Testdata`.
+`Tests` folder includes XCode project that you should run to tests generated
+Swift code. Before running tests you need to execute `./ardugen.sh` script to
+generate Swift and C code into right subfolders. C code is used to compare
+output results and ensure that Swift implementation interprets data in the same
+way. `ardugen.sh` uses `ardupilotmega.xml` definition file from
+`Tests/MAVLinkTests/Testdata`.
 
-Unit tests cover conversion of raw data to/from Swift types. Also there are several integration tests that compare work of Swift code and C implementation on real-world tlog file.
+Unit tests cover conversion of raw data to/from Swift types. Also there are
+several integration tests that compare work of Swift code and C implementation
+on real-world tlog file.
