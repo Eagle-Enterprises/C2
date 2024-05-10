@@ -9,7 +9,7 @@
 """_summary_
 """
 
-from tkinter import StringVar
+from tkinter import Label, StringVar
 import customtkinter
 import serial
 import io
@@ -26,8 +26,8 @@ GPS_EXAMPLE_LOCATION=""
 HEIGHT = 140
 X_POS = -7
 Y_POS = 0
-INITIAL_LOCATION=""
-INITIAL_DISTANCE=""
+INITIAL_LOCATION="0"
+INITIAL_DISTANCE="0"
 
 
 # Set initial appearance mode
@@ -51,7 +51,7 @@ args = parser.parse_args()
 # Start a connection listening on a UDP port
 #connection = mavutil.mavlink_connection('udpin:localhost:14551',source_system=args.SOURCE_SYSTEM)
 # Start a connection listening on a COM port
-connection = mavutil.mavlink_connection('COM7',baud=57600)
+connection = mavutil.mavlink_connection('COM8',baud=57600)
 
 class App(customtkinter.CTk):
     """
@@ -96,7 +96,8 @@ class App(customtkinter.CTk):
         self.final_location_label_content="Target found at:"
         self.location_label_content = StringVar()
         self.location_label_content.set(initial_location_label_content)
-        self.location_value = StringVar(INITIAL_LOCATION)
+        self.location_value = StringVar(value=INITIAL_LOCATION)
+        #special_distance=StringVar(value=INITIAL_DISTANCE)
 
         # Distance
         initial_distance_label_content="Calculating target distance..."
@@ -162,7 +163,7 @@ class App(customtkinter.CTk):
                 font=customtkinter.CTkFont(size=14, weight="bold"), justify="center", anchor="w")
         asset_distance_title_label.grid(row=0, column=4, padx=20, pady=20)
         asset_distance_label = customtkinter.CTkLabel\
-            (distance_bkg, textvariable=self.distance_value,\
+            (distance_bkg, textvariable=str(self.distance_value),\
                 font=customtkinter.CTkFont(size=14))
         asset_distance_label.grid(row=0, column=0, padx=20, pady=20)
 
@@ -207,19 +208,18 @@ class App(customtkinter.CTk):
             self.clipboard_append(location)
             
             # Method to update distance
-    def update_asset_distance(self, message):
+    def update_asset_distance(self, distance):
         """
         Updates the displayed asset distance if the provided distance is greater than 0.
 
         If the distance is positive, sets the distance label content and value accordingly.
 
-        Args:
-            distance (int): The distance value to update and display.
+        
 
         Returns:
             None
         """
-        distance=f"UWB Distance: {str(msg.param1)}"
+        
         self.distance_label_content.set(self.final_distance_label_content)
         self.distance_value.set(f"{distance} m.")
 
@@ -227,7 +227,8 @@ if __name__ == "__main__":
     app = App()
     connection.wait_heartbeat()
     while 1:
-        msg = connection.recv_match(type="MISSION_ITEM_REACHED", blocking=True)
-        print(msg)
-        app.update_asset_distance(msg)
+        msg = connection.recv_match(type="COMMAND_LONG", blocking=True)
+        distance=f"UWB Distance: {str(msg.param1)}"
+        #print(distance)
+        app.update_asset_distance(distance)
         app.update()
