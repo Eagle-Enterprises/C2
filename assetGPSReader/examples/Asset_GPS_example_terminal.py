@@ -13,19 +13,20 @@ import pynmea2
 
 # Method to convert latitude and longitde degrees into decimals
 def lat_long_converter(latitude, latitude_direction, longitude, longitude_direction):
-    lat_dd = int(float(latitude)/100)
-    lat_mm = float(latitude) - lat_dd * 100
-    lat_multiplier = int(1 if latitude_direction in ['N', 'E'] else -1)
-    lat_decimal = lat_multiplier * (lat_dd + lat_mm/60)
-    lat_string = str(lat_decimal)
+    lat_string = _extracted_from_lat_long_converter_2(latitude, latitude_direction)
+    long_string = _extracted_from_lat_long_converter_2(
+        longitude, latitude_direction
+    )
+    return f"{lat_string};{long_string}"
 
-    long_dd = int(float(longitude)/100)
-    long_mm = float(longitude) - long_dd * 100
-    long_multiplier = int(1 if latitude_direction in ['N', 'E'] else -1)
-    long_decimal = long_multiplier * (long_dd + long_mm/60)
-    long_string = str(long_decimal)
-    
-    return lat_string+";"+long_string
+
+# TODO Rename this here and in `lat_long_converter`
+def _extracted_from_lat_long_converter_2(arg0, latitude_direction):
+    lat_dd = int(float(arg0) / 100)
+    lat_mm = float(arg0) - lat_dd * 100
+    lat_multiplier = 1 if latitude_direction in ['N', 'E'] else -1
+    lat_decimal = lat_multiplier * (lat_dd + lat_mm/60)
+    return str(lat_decimal)
 
 
 # NMEA sentence example for testing

@@ -37,10 +37,10 @@ coordinates_label=Label(window, textvariable=asset_location, font=("Arial", 20))
 while True:
         sleep(1)
         try:
-            nmea_parsed = pynmea2.parse(gps_serial_port.readline().decode('ascii', errors='replace'))
-            asset_location.set(nmea_parsed.lat+";"+nmea_parsed.lon)
-            # Used for debugging
-            print(nmea_parsed.lat+":"+nmea_parsed.lon)
+                nmea_parsed = pynmea2.parse(gps_serial_port.readline().decode('ascii', errors='replace'))
+                asset_location.set(f"{nmea_parsed.lat};{nmea_parsed.lon}")
+                # Used for debugging
+                print(f"{nmea_parsed.lat}:{nmea_parsed.lon}")
         except Exception as e:
             text="Gathering Asset Location"
             asset_location.set(text)
