@@ -1,5 +1,11 @@
+"""_summary_
+
+Returns:
+    _type_: _description_
+"""
+
 ####################################################
-#### Eagle Enterprises Propriertary Information  ####
+#### Eagle Enterprises Propriertary Information ####
 ####################################################
 #                  DESCRIPTION                     #
 # This example depicts how to determine a specific #
@@ -9,13 +15,11 @@
 
 # Imports
 # Requires install of python, rich, pyserial (i.e. pip instal pyserial)
-import rich.table
 import serial
-from time import sleep
 import serial.tools
 import serial.tools.list_ports
-import rich
-from rich.console import Console
+import rich.console
+import rich.table
 
 #variables & constants
 # Description may be found in device manager,
@@ -52,18 +56,20 @@ def list_port_info():
     """
 
     table = rich.table.Table(title="Ports")
-    columns = ["Port", "HWID", "DESCRIPTION",  "VID", "PID",  "SERIAL NUMBER", "INTERFACE",  "LOCATION", "MANUFACTURER", "PRODUCT"]
+    columns = ["PORT", "HWID", "DESCRIPTION",  "VID", "PID",
+               "SERIAL NUMBER", "INTERFACE",  "LOCATION", "MANUFACTURER",
+               "PRODUCT"]
 
     for column in columns:
         table.add_column(column)
-    
+
     comports = list_comports()
     for port in comports:
         table.add_row(*port)
-    console = Console()
+    console = rich.console.Console()
     print(console.print(table))
 
-def device_port():
+def find_device_by_description(DESCRIPTION):
     """
     Connects to a device port based on a specific description in the list of available com ports.
 
@@ -76,10 +82,9 @@ def device_port():
             #print(port)
             # Connection to port
             # s = serial.Serial(port.device)
-            print(f"Port Found: {port.device}")
-    
+            return port.device
+
 # Read COM PORT and update window display
 if __name__ == '__main__':
     list_port_info()
-    device_port()
-
+    print(f"Port Found: {find_device_by_description(DESCRIPTION)}")
