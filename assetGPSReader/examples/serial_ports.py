@@ -86,4 +86,5 @@ def find_device_by_description(DESCRIPTION):
 # Read COM PORT and update window display
 if __name__ == '__main__':
     list_port_info()
+    print(f"Serched for Description: \"{DESCRIPTION}\"")
     print(f"Port Found: {find_device_by_description(DESCRIPTION)}")
