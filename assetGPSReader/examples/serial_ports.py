@@ -12,7 +12,6 @@ Returns:
 # COM PORT.                                        #
 ####################################################
 
-
 # Imports
 # Requires install of python, rich, pyserial (i.e. pip instal pyserial)
 import serial
