@@ -5,7 +5,7 @@ Returns:
 """
 
 ####################################################
-#### Eagle Enterprises Propriertary Information ####
+#### Eagle Enterprises Proprietary Information ####
 ####################################################
 #                  DESCRIPTION                     #
 # This example depicts how to determine a specific #
