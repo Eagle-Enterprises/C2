@@ -22,21 +22,30 @@ ABSOLUTE_PATH = os.path.dirname(__file__)
 CUSTOM_GUI_PATH = "custom_gui.py"
 CUSTOM_GUI_FULL_PATH = os.path.join(ABSOLUTE_PATH, CUSTOM_GUI_PATH)
 CUSTOM_GUI_COMMAND = f"python {CUSTOM_GUI_FULL_PATH}"
-# OBS path  # TO-DO: Replace with OBS path
+#OBS path  # TO-DO: Replace with OBS path
 OBS_PATH = "obs_test_placeholder.py"
 OBS_FULL_PATH = os.path.join(ABSOLUTE_PATH, OBS_PATH)
 OBS_COMMAND = f"python {OBS_FULL_PATH}"
+#Troubleshoot: ask someone if it's okay to uninstall and reinstall OBS studio
+## error: failed to locate locale/en-US.ini. Internet says to reinstall to see if that fixes issue.
+#OBS_PATH = 'C:\\Program Files\\obs-studio\\bin\\64bit\\obs64.exe'
 # Mission Planner  # TO-DO: Replace with OBS path
 MISSION_PLANNER_PATH = 'C:\\Program Files (x86)\\Mission Planner\\MissionPlanner.exe'
 
 
-# Open Mission Planner and Custom GUI
-with subprocess.Popen(CUSTOM_GUI_COMMAND) as p:
-    time.sleep(0.1)
-with subprocess.Popen(MISSION_PLANNER_PATH) as p:
-    time.sleep(0.1)
-with subprocess.Popen(OBS_COMMAND) as p:
-    time.sleep(0.1)
+# Open Mission Planner, Custom GUI, and OBS Studio
+programs = [CUSTOM_GUI_COMMAND, MISSION_PLANNER_PATH, OBS_COMMAND] #change OBS_COMMAND to OBS_PATH later
+for program in programs:
+    subprocess.Popen(program)
+    print(program + " launched")
+
+#old code
+#with subprocess.Popen(CUSTOM_GUI_COMMAND) as p:
+#    time.sleep(0.1)
+#with subprocess.Popen(MISSION_PLANNER_PATH) as p:
+#    time.sleep(0.1)
+#with subprocess.Popen(OBS_COMMAND) as p:
+#    time.sleep(0.1)
 
 # Give child processes enough time to launch
 time.sleep(10)
@@ -46,7 +55,7 @@ windows = pygetwindow.getAllTitles()
 
 # Print a list of the currently opened windows
 for window in windows:
-    print(window)
+    print("====================" + window + "======================")
 
 # Specify the name of the window to resize
 customGUI = pygetwindow.getWindowsWithTitle("CAPTURE")[0]

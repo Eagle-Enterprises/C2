@@ -9,16 +9,16 @@
 """_summary_
 """
 
-from tkinter import StringVar
+from tkinter import Label, StringVar
 import customtkinter
 
 # CONSTANTS and variables
 # Distance used only for initial tests
 EXAMPLE_DISTANCE=0
-#EXAMPLE_DISTANCE=190
+EXAMPLE_DISTANCE=30 #This is going to be fed from the initial_test_rx_amy
 # Location used only for initial tests
 GPS_EXAMPLE_LOCATION=""
-#GPS_EXAMPLE_LOCATION="38.924144999999996;94.76678500000001"
+GPS_EXAMPLE_LOCATION="38.7514053549052; -77.4952585995197"
 HEIGHT = 140
 X_POS = -7
 Y_POS = 0
@@ -75,7 +75,8 @@ class App(customtkinter.CTk):
         self.final_location_label_content="Target found at:"
         self.location_label_content = StringVar()
         self.location_label_content.set(initial_location_label_content)
-        self.location_value = StringVar(INITIAL_LOCATION)
+        #self.location_value = StringVar(INITIAL_LOCATION)
+        self.location_value = StringVar(value = INITIAL_LOCATION)
 
         # Distance
         initial_distance_label_content="Calculating target distance..."
@@ -83,7 +84,8 @@ class App(customtkinter.CTk):
         self.distance_label_content = StringVar()
         self.distance_label_content.set(initial_distance_label_content)
         self.distance_value = StringVar()
-        self.distance_value.set(INITIAL_DISTANCE)
+        #self.distance_value.set(INITIAL_DISTANCE)
+        self.distance_value.set(value = INITIAL_DISTANCE)
 
         #First column
 
@@ -117,11 +119,21 @@ class App(customtkinter.CTk):
         location_bkg.rowconfigure(0, weight=1)
         location_bkg.columnconfigure(0, weight=1)
 
+
+
+
         # Asset Location title and value
         location_title_label = customtkinter.CTkLabel\
             (self, textvariable=self.location_label_content, font=customtkinter.CTkFont\
             (size=14, weight="bold"), justify="center", anchor="w")
         location_title_label.grid(row=0, column=2, padx=20, pady=20)
+
+        def copy_text_on_creation():
+        # Copy the text content to the clipboard immediately
+            self.clipboard_clear()  # Clear any existing clipboard content (optional)
+            self.clipboard_append(self.location_value.get())
+        # Call the copy function on creation
+            copy_text_on_creation()
         location_value_label = customtkinter.CTkLabel\
             (location_bkg, textvariable=self.location_value,\
                 font=customtkinter.CTkFont(size=14))
