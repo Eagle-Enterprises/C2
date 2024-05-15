@@ -13,7 +13,7 @@ Returns:
 ####################################################
 
 # Imports
-# Requires install of python, tkinter, pyserial, and pynmea2 (i.e. pip install pyserial)
+# Requires install of python and pyserial (i.e. pip install pyserial)
 import io
 import serial # type: ignore
 

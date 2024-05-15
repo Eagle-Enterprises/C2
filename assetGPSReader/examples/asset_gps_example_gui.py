@@ -1,5 +1,5 @@
 ####################################################
-#### Eagle Enterprises Propiertary Information  ####
+#### Eagle Enterprises Proprietary Information  ####
 ####################################################
 #                  DESCRIPTION                     #
 # This sample depicts a connection to a COM port   #

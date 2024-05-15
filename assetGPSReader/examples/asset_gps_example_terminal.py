@@ -1,5 +1,5 @@
 ####################################################
-#### Eagle Enterprises Propiertary Information  ####
+#### Eagle Enterprises Proprietary Information  ####
 ####################################################
 #                  DESCRIPTION                     #
 # This sample code takes a NMEA sentence, converts #
