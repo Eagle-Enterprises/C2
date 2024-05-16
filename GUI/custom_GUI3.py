@@ -193,7 +193,7 @@ class App(customtkinter.CTk):
         """
         customtkinter.set_appearance_mode(new_appearance_mode)
 
-    def parse_gps(gps_string):
+    def parse_gps(self, gps_string):
         """
         Parses a GPS string to extract latitude and longitude coordinates.
 
@@ -203,11 +203,11 @@ class App(customtkinter.CTk):
         Returns:
             None
         """
+        print(gps_string)
         string = str(gps_string)
         split_string = string.split(":")
         lat=split_string[1].split(",")[0]
         lon=split_string[2].split(",")[0]
-        print("GPS STRING: " + gps_string)
         return f"{lat};{lon}"
     
     # Method to update location
@@ -227,13 +227,13 @@ class App(customtkinter.CTk):
         try:
             location = self.parse_gps(gps_serial_port.readline().decode('ascii', errors='replace'))
         except Exception as e:
-            print("Error occurred")
+            print(e)
 
         #location != ""
         self.location_label_content.set(self.final_location_label_content)
         self.location_value.set(location)
         # Copies location to clipboard so the user may paste it in MP
-        self.clipboard_append(location)
+       # self.clipboard_append(location)
             
     # Method to update distance
     def update_asset_distance(self, distance):
@@ -242,12 +242,10 @@ class App(customtkinter.CTk):
 
         If the distance is positive, sets the distance label content and value accordingly.
 
-        
-
         Returns:
             None
         """
-        
+
         self.distance_label_content.set(self.final_distance_label_content)
         self.distance_value.set(f"{distance} m.")
 
@@ -278,7 +276,7 @@ if __name__ == "__main__":
     while 1:
         #msg = connection.recv_match(type="COMMAND_LONG", blocking=True)
         #distance=f"UWB Distance: {str(msg.param1)}"
-        distance=f"UWB Distance: {0}"
+        distance=f"{0} m"
         #print(distance)
         app.update_asset_distance(distance)
         app.update_asset_location(gps_serial_port)
