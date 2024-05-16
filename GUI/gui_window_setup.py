@@ -28,13 +28,13 @@ OBS_FULL_PATH = os.path.join(ABSOLUTE_PATH, OBS_PATH)
 OBS_COMMAND = f"python {OBS_FULL_PATH}"
 #Troubleshoot: ask someone if it's okay to uninstall and reinstall OBS studio
 ## error: failed to locate locale/en-US.ini. Internet says to reinstall to see if that fixes issue.
-#OBS_PATH = 'C:\\Program Files\\obs-studio\\bin\\64bit\\obs64.exe'
+OBS_PATH = 'C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\OBS Studio'
 # Mission Planner  # TO-DO: Replace with OBS path
 MISSION_PLANNER_PATH = 'C:\\Program Files (x86)\\Mission Planner\\MissionPlanner.exe'
 
 
 # Open Mission Planner, Custom GUI, and OBS Studio
-programs = [CUSTOM_GUI_COMMAND, MISSION_PLANNER_PATH, OBS_COMMAND] #change OBS_COMMAND to OBS_PATH later
+programs = [CUSTOM_GUI_COMMAND, MISSION_PLANNER_PATH, OBS_PATH] #change OBS_COMMAND to OBS_PATH later
 for program in programs:
     subprocess.Popen(program)
     print(program + " launched")

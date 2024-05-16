@@ -56,7 +56,7 @@ args = parser.parse_args()
 # Start a connection listening on a UDP port
 #connection = mavutil.mavlink_connection('udpin:localhost:14551',source_system=args.SOURCE_SYSTEM)
 # Start a connection listening on a COM port
-connection = mavutil.mavlink_connection('COM8',baud=57600)
+#connection = mavutil.mavlink_connection('COM8',baud=57600)
 
 class App(customtkinter.CTk):
     """
@@ -174,8 +174,8 @@ class App(customtkinter.CTk):
 
         # Update location and distance. Code to obtain location and distance \
             # to be added once integrated with sensors.
-        self.update_asset_location(GPS_EXAMPLE_LOCATION)
-        self.update_asset_distance(EXAMPLE_DISTANCE)
+        #self.update_asset_location(GPS_EXAMPLE_LOCATION)
+        #self.update_asset_distance(EXAMPLE_DISTANCE)
         #self.update() # Not sure if needed
 
     # Method to change appearance
@@ -207,6 +207,7 @@ class App(customtkinter.CTk):
         split_string = string.split(":")
         lat=split_string[1].split(",")[0]
         lon=split_string[2].split(",")[0]
+        print("GPS STRING: " + gps_string)
         return f"{lat};{lon}"
     
     # Method to update location
@@ -222,16 +223,17 @@ class App(customtkinter.CTk):
         Returns:
             None
         """
+        location = ""
         try:
-            location = parse_gps(gps_serial_port.readline().decode('ascii', errors='replace'))
+            location = self.parse_gps(gps_serial_port.readline().decode('ascii', errors='replace'))
         except Exception as e:
             print("Error occurred")
 
-        if location != "":
-            self.location_label_content.set(self.final_location_label_content)
-            self.location_value.set(location)
-            # Copies location to clipboard so the user may paste it in MP
-            self.clipboard_append(location)
+        #location != ""
+        self.location_label_content.set(self.final_location_label_content)
+        self.location_value.set(location)
+        # Copies location to clipboard so the user may paste it in MP
+        self.clipboard_append(location)
             
     # Method to update distance
     def update_asset_distance(self, distance):
@@ -272,10 +274,12 @@ if __name__ == "__main__":
     gps_baudrate=GPS_BAUD_RATE
     gps_serial_port = serial.Serial(port=gps_port, baudrate=gps_baudrate, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
     gps_serial_io = io.TextIOWrapper(io.BufferedRWPair(gps_serial_port, gps_serial_port))
-    connection.wait_heartbeat()
+    #connection.wait_heartbeat()
     while 1:
-        msg = connection.recv_match(type="COMMAND_LONG", blocking=True)
-        distance=f"UWB Distance: {str(msg.param1)}"
+        #msg = connection.recv_match(type="COMMAND_LONG", blocking=True)
+        #distance=f"UWB Distance: {str(msg.param1)}"
+        distance=f"UWB Distance: {0}"
         #print(distance)
         app.update_asset_distance(distance)
+        app.update_asset_location(gps_serial_port)
         app.update()
