@@ -253,7 +253,8 @@ def find_device_by_serial_number(SERIAL_NUMBER):
     """
     Connects to a device port based on a specific description in the list of available com ports.
 
-    No Args or Returns specified.
+    Returns:
+        String
     """
     comports = serial.tools.list_ports.comports()
     for port in comports:
