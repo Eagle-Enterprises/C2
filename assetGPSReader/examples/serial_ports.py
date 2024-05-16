@@ -23,7 +23,8 @@ import rich.table
 #variables & constants
 # Description may be found in device manager,
 # in the properties, as the Display Name
-DESCRIPTION="Electronic Team Virtual Serial Port (COM1->COM2)"
+SERIAL_NUMBER="95032303837351F031D2"
+#DESCRIPTION="Electronic Team Virtual Serial Port (COM1->COM2)"
 
 def list_serial_ports():
     """
@@ -68,23 +69,25 @@ def list_port_info():
     console = rich.console.Console()
     print(console.print(table))
 
-def find_device_by_description(DESCRIPTION):
+def find_device_by_serial_number(SERIAL_NUMBER):
     """
     Connects to a device port based on a specific description in the list of available com ports.
 
     No Args or Returns specified.
     """
-
     comports = list_comports()
     for port in comports:
-        if DESCRIPTION in port.description:
-            #print(port)
-            # Connection to port
-            # s = serial.Serial(port.device)
-            return port.device
+        try:
+            if SERIAL_NUMBER in port.serial_number:
+                #print(port)
+                # Connection to port
+                # s = serial.Serial(port.device)
+                return port.device
+        except Exception as e:
+            pass
 
 # Read COM PORT and update window display
 if __name__ == '__main__':
-    list_port_info()
-    print(f"Searched for Description: \"{DESCRIPTION}\"")
-    print(f"Port Found: {find_device_by_description(DESCRIPTION)}")
+    #list_port_info()
+    print(f"Searched for Serial Number: \"{SERIAL_NUMBER}\"")
+    print(f"Port Found: {find_device_by_serial_number(SERIAL_NUMBER)}")
