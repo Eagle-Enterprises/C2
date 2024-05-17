@@ -27,7 +27,8 @@ PAIR_PORT1 = 14550
 PAIR_PORT2 = 14551
 
 # Running subprocess
-# example: mavproxy --master=COM8 --out 127.0.0.1:14550 --out 127.0.0.1:14551
-#print(f"mavproxy.py --master={DEFAULT_PROTOCOL}{DEFAULT_CONNECTION}{DEFAULT_PORT} --out {NEW_CONNECTION}:{PAIR_PORT1} --out {NEW_CONNECTION}:{PAIR_PORT2}")
+# example: mavproxy.py --master=COM8 --out 127.0.0.1:14550 --out 127.0.0.1:14551
+# For debugging, uncomment the line below:
+# print(f"mavproxy.py --master={DEFAULT_PROTOCOL}{DEFAULT_CONNECTION}{DEFAULT_PORT} --out {NEW_CONNECTION}:{PAIR_PORT1} --out {NEW_CONNECTION}:{PAIR_PORT2}")
 subprocess.call(f"mavproxy.py --master={DEFAULT_PROTOCOL}{DEFAULT_CONNECTION}{DEFAULT_PORT} --out={NEW_CONNECTION}:{PAIR_PORT1} --out={NEW_CONNECTION}:{PAIR_PORT2}", shell=True)
 
