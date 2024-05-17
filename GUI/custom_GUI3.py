@@ -11,6 +11,7 @@
 
 from tkinter import Label, StringVar
 import customtkinter
+import subprocess
 import serial
 import serial.tools
 import serial.tools.list_ports
@@ -23,7 +24,7 @@ import rich.table
 # CONSTANTS and variables
 # Distance used only for initial tests
 EXAMPLE_DISTANCE=0
-#EXAMPLE_DISTANCE=190
+# EXAMPLE_DISTANCE=190
 # Location used only for initial tests
 GPS_EXAMPLE_LOCATION=""
 #GPS_EXAMPLE_LOCATION="38.924144999999996;94.76678500000001"
@@ -34,6 +35,14 @@ INITIAL_LOCATION="0"
 INITIAL_DISTANCE="0"
 SERIAL_NUMBER="95032303837351F031D2"
 GPS_BAUD_RATE = 9600
+# MavProxy connection constants
+DEFAULT_PROTOCOL="" # OPTIONAL, end with ':'
+DEFAULT_CONNECTION = "" # OPTIONAL, end with ':'
+DEFAULT_PORT = "COM8"
+NEW_PORT_PROTOCOL = "udpin"
+NEW_CONNECTION = "127.0.0.1"
+MISSION_PLANNER_PORT = 14550 # Pair Port 1 Reserved for Mission Planner
+PYTHON_PORT = 14551 # Pair Port 2 Reserved for Python Scripts
 
 # Set initial appearance mode
 # Modes: "System" (standard), "Dark", "Light"
@@ -42,21 +51,13 @@ customtkinter.set_appearance_mode("System")
 customtkinter.set_default_color_theme("dark-blue")
 
 
-# Parsing
-
+# Parsing Setup
 parser = ArgumentParser(description=__doc__)
 parser.add_argument("--baudrate", type=int,
     help="master port baud rate", default=115200)
 parser.add_argument("--source-system", dest='SOURCE_SYSTEM', type=int,
     default=252, help='MAVLink source system for this GCS')
 args = parser.parse_args()
-
-# Connection
-
-# Start a connection listening on a UDP port
-#connection = mavutil.mavlink_connection('udpin:localhost:14551',source_system=args.SOURCE_SYSTEM)
-# Start a connection listening on a COM port
-#connection = mavutil.mavlink_connection('COM8',baud=57600)
 
 class App(customtkinter.CTk):
     """
@@ -172,13 +173,11 @@ class App(customtkinter.CTk):
                 font=customtkinter.CTkFont(size=14))
         asset_distance_label.grid(row=0, column=0, padx=20, pady=20)
 
-        # Update location and distance. Code to obtain location and distance \
-            # to be added once integrated with sensors.
+        # Example to update location and distance.
         #self.update_asset_location(GPS_EXAMPLE_LOCATION)
         #self.update_asset_distance(EXAMPLE_DISTANCE)
-        #self.update() # Not sure if needed
+        #self.update()
 
-    # Method to change appearance
     def change_appearance_mode_event(self, new_appearance_mode: str):
         """
         Changes the appearance mode of the GUI to the specified mode.
@@ -203,14 +202,14 @@ class App(customtkinter.CTk):
         Returns:
             None
         """
-        print(gps_string)
+        # Line below is only used for debugging
+        # print(gps_string)
         string = str(gps_string)
         split_string = string.split(":")
         lat=split_string[1].split(",")[0]
         lon=split_string[2].split(",")[0]
         return f"{lat};{lon}"
     
-    # Method to update location
     def update_asset_location(self, gps_serial_port):
         """
         Updates the displayed asset location based on the provided location string.
@@ -232,10 +231,9 @@ class App(customtkinter.CTk):
         #location != ""
         self.location_label_content.set(self.final_location_label_content)
         self.location_value.set(location)
-        # Copies location to clipboard so the user may paste it in MP
-       # self.clipboard_append(location)
+        # OPTIONAL: Copies location to clipboard so the user may paste it in MP
+        # self.clipboard_append(location)
             
-    # Method to update distance
     def update_asset_distance(self, distance):
         """
         Updates the displayed asset distance if the provided distance is greater than 0.
@@ -260,25 +258,51 @@ def find_device_by_serial_number(SERIAL_NUMBER):
     for port in comports:
         try:
             if SERIAL_NUMBER in port.serial_number:
-                #print(port)
-                # Connection to port
-                # s = serial.Serial(port.device)
                 return port.device
         except Exception as e:
             pass
+def setup_mavlink():
+    """
+    Setup and start the MAVLink communication.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+
+    subprocess.call(f"mavproxy.py --master={DEFAULT_PROTOCOL}{DEFAULT_CONNECTION}{DEFAULT_PORT} --out={NEW_CONNECTION}:{MISSION_PLANNER_PORT} --out={NEW_CONNECTION}:{PYTHON_PORT}", shell=True)
+
 
 if __name__ == "__main__":
+    # Create app
     app = App()
+
+    # Set up MavLink pair ports
+    setup_mavlink()
+    
+    # Start a connection listening on one of the pair ports
+    # Commented due to temporary errors
+    # connection = mavutil.mavlink_connection(f"{NEW_PORT_PROTOCOL}{NEW_CONNECTION}{PAIR_PORT2}",source_system=args.SOURCE_SYSTEM)
+    
+    # Set up Asset RF GPS connection
     gps_port=find_device_by_serial_number(SERIAL_NUMBER)
     gps_baudrate=GPS_BAUD_RATE
     gps_serial_port = serial.Serial(port=gps_port, baudrate=gps_baudrate, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
     gps_serial_io = io.TextIOWrapper(io.BufferedRWPair(gps_serial_port, gps_serial_port))
+    
+    # Commented out due to temporary errors
+    # Wait for first heartbeat
     #connection.wait_heartbeat()
+    
     while 1:
-        #msg = connection.recv_match(type="COMMAND_LONG", blocking=True)
-        #distance=f"UWB Distance: {str(msg.param1)}"
-        distance=f"{0} m"
-        #print(distance)
+        # Commented out due to temporary errors
+        # msg = connection.recv_match(type="COMMAND_LONG", blocking=True)
+        # distance=f"{str(msg.param1)}"
+        distance=f"{EXAMPLE_DISTANCE}"
+        # Line below is only used for debugging:
+        # print(distance)
         app.update_asset_distance(distance)
         app.update_asset_location(gps_serial_port)
         app.update()
