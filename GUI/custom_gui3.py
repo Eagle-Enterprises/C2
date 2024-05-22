@@ -37,7 +37,7 @@ Y_POS = 0
 INITIAL_LOCATION="0"
 INITIAL_DISTANCE="0"
 SERIAL_NUMBER="95032303837351F031D2"
-GPS_BAUD_RATE = 9600
+GPS_BAUD_RATE = 115200
 # MavProxy connection constants
 DEFAULT_PROTOCOL="" # OPTIONAL, end with ':'
 DEFAULT_CONNECTION = "" # OPTIONAL, end with ':'
@@ -208,10 +208,11 @@ class App(customtkinter.CTk):
         # Line below is only used for debugging
         # print(gps_string)
         string = str(gps_string)
-        split_string = string.split(":")
-        lat=split_string[1].split(",")[0]
-        lon=split_string[2].split(",")[0]
-        return f"{lat};{lon}"
+        if(string.__contains__("Received")):
+            split_string = string.split(":")
+            lat=split_string[2].split(",")[0]
+            lon=split_string[3].split(",")[0]
+            return f"{lat};{lon}"
 
     def update_asset_location(self, gps_serial_port_param):
         """
@@ -227,16 +228,17 @@ class App(customtkinter.CTk):
         """
         location = ""
         try:
+            #location="0"
             location = self.parse_gps( \
                 gps_serial_port_param.readline().decode('ascii', errors='replace'))
+            if(location):
+                print(location)
+                self.location_label_content.set(self.final_location_label_content)
+                self.location_value.set(location)
+                # OPTIONAL: Copies location to clipboard so the user may paste it in MP
+                # self.clipboard_append(location)
         except Exception as e:
             print(e)
-
-        #location != ""
-        self.location_label_content.set(self.final_location_label_content)
-        self.location_value.set(location)
-        # OPTIONAL: Copies location to clipboard so the user may paste it in MP
-        # self.clipboard_append(location)
 
     def update_asset_distance(self, distance_param):
         """
@@ -247,7 +249,6 @@ class App(customtkinter.CTk):
         Returns:
             None
         """
-
         self.distance_label_content.set(self.final_distance_label_content)
         self.distance_value.set(f"{distance_param} m.")
 
@@ -262,6 +263,7 @@ def find_device_by_serial_number(serial_number):
     for port in comports:
         try:
             if serial_number in port.serial_number:
+                print(port.device)
                 return port.device
         except Exception as e:
             pass
@@ -277,10 +279,10 @@ def setup_mavlink():
     """
     # Commented due to temporary errors
     print()
-    # command = f"mavproxy.py --master={DEFAULT_PROTOCOL}{DEFAULT_CONNECTION}{DEFAULT_PORT} \
-        # --out={NEW_CONNECTION}:{MISSION_PLANNER_PORT} \
-        # --out={NEW_CONNECTION}:{PYTHON_PORT}"
-    #subprocess.call(command, shell=True)
+    #command = f"mavproxy.py --master={DEFAULT_PROTOCOL}{DEFAULT_CONNECTION}{DEFAULT_PORT} \
+       # --out={NEW_CONNECTION}:{MISSION_PLANNER_PORT} \
+       # --out={NEW_CONNECTION}:{PYTHON_PORT}"
+    #subprocess.Popen(command, shell=True)
 
 
 if __name__ == "__main__":
@@ -288,23 +290,23 @@ if __name__ == "__main__":
     app = App()
 
     # Set up MavLink pair ports
-    setup_mavlink()
+    # setup_mavlink()
 
     # Start a connection listening on one of the pair ports
     # Commented due to temporary errors
-    connection_string = f"{NEW_PORT_PROTOCOL}{NEW_CONNECTION}{PYTHON_PORT}"
-    connection = mavutil.mavlink_connection(connection_string, source_system=args.SOURCE_SYSTEM)
+    # connection_string = f"{NEW_PORT_PROTOCOL}:{NEW_CONNECTION}:{PYTHON_PORT}"
+    # connection = mavutil.mavlink_connection(connection_string, source_system=args.SOURCE_SYSTEM)
 
     # Set up Asset RF GPS connection
-    gps_port=find_device_by_serial_number(SERIAL_NUMBER)
-    gps_serial_port = serial.Serial(port=gps_port, \
+    # gps_port=find_device_by_serial_number(SERIAL_NUMBER)
+    gps_serial_port = serial.Serial(port="COM11", \
         baudrate=GPS_BAUD_RATE, bytesize=8, timeout=2, \
             stopbits=serial.STOPBITS_ONE)
     gps_serial_io = io.TextIOWrapper(io.BufferedRWPair(gps_serial_port, gps_serial_port))
 
     # Commented out due to temporary errors
     # Wait for first heartbeat
-    #connection.wait_heartbeat()
+    # connection.wait_heartbeat()
 
     while 1:
         # Commented out due to temporary errors
