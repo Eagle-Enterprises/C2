@@ -232,7 +232,8 @@ class App(customtkinter.CTk):
             location = self.parse_gps( \
                 gps_serial_port_param.readline().decode('ascii', errors='replace'))
             if(location):
-                print(location)
+                # For debugging
+                # print(location)
                 self.location_label_content.set(self.final_location_label_content)
                 self.location_value.set(location)
                 # OPTIONAL: Copies location to clipboard so the user may paste it in MP
