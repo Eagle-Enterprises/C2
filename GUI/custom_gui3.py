@@ -10,7 +10,7 @@
 """
 
 
-#import subprocess # Commented due to temporary errors
+import subprocess # Comment when not connected to UAV
 import io
 from argparse import ArgumentParser
 from tkinter import StringVar
@@ -19,8 +19,6 @@ import serial.tools
 import serial.tools.list_ports
 import customtkinter
 from pymavlink import mavutil
-#import rich.console
-# import rich.table
 #from time import sleep
 
 
@@ -176,11 +174,6 @@ class App(customtkinter.CTk):
                 font=customtkinter.CTkFont(size=14))
         asset_distance_label.grid(row=0, column=0, padx=20, pady=20)
 
-        # Example to update location and distance.
-        #self.update_asset_location(GPS_EXAMPLE_LOCATION)
-        #self.update_asset_distance(EXAMPLE_DISTANCE)
-        #self.update()
-
     def change_appearance_mode_event(self, new_appearance_mode: str):
         """
         Changes the appearance mode of the GUI to the specified mode.
@@ -228,11 +221,10 @@ class App(customtkinter.CTk):
         """
         location = ""
         try:
-            #location="0"
             location = self.parse_gps( \
                 gps_serial_port_param.readline().decode('ascii', errors='replace'))
             if(location):
-                # For debugging
+                # Line below is only used for debugging
                 # print(location)
                 self.location_label_content.set(self.final_location_label_content)
                 self.location_value.set(location)
@@ -278,12 +270,12 @@ def setup_mavlink():
     Returns:
         None
     """
-    # Commented due to temporary errors
+    # Comment when not connected to UAV
     print()
-    #command = f"mavproxy.py --master={DEFAULT_PROTOCOL}{DEFAULT_CONNECTION}{DEFAULT_PORT} \
-       # --out={NEW_CONNECTION}:{MISSION_PLANNER_PORT} \
-       # --out={NEW_CONNECTION}:{PYTHON_PORT}"
-    #subprocess.Popen(command, shell=True)
+    command = f"mavproxy.py --master={DEFAULT_PROTOCOL}{DEFAULT_CONNECTION}{DEFAULT_PORT} \
+       --out={NEW_CONNECTION}:{MISSION_PLANNER_PORT} \
+       --out={NEW_CONNECTION}:{PYTHON_PORT}"
+    subprocess.Popen(command, shell=True)
 
 
 if __name__ == "__main__":
@@ -291,12 +283,12 @@ if __name__ == "__main__":
     app = App()
 
     # Set up MavLink pair ports
-    # setup_mavlink()
+    setup_mavlink()
 
     # Start a connection listening on one of the pair ports
-    # Commented due to temporary errors
-    # connection_string = f"{NEW_PORT_PROTOCOL}:{NEW_CONNECTION}:{PYTHON_PORT}"
-    # connection = mavutil.mavlink_connection(connection_string, source_system=args.SOURCE_SYSTEM)
+    # Comment when not connected to UAV
+    connection_string = f"{NEW_PORT_PROTOCOL}:{NEW_CONNECTION}:{PYTHON_PORT}"
+    connection = mavutil.mavlink_connection(connection_string, source_system=args.SOURCE_SYSTEM)
 
     # Set up Asset RF GPS connection
     # gps_port=find_device_by_serial_number(SERIAL_NUMBER)
@@ -305,14 +297,14 @@ if __name__ == "__main__":
             stopbits=serial.STOPBITS_ONE)
     gps_serial_io = io.TextIOWrapper(io.BufferedRWPair(gps_serial_port, gps_serial_port))
 
-    # Commented out due to temporary errors
+    # Comment when not connected to UAV
     # Wait for first heartbeat
-    # connection.wait_heartbeat()
+    connection.wait_heartbeat()
 
     while 1:
-        # Commented out due to temporary errors
-        # msg = connection.recv_match(type="COMMAND_LONG", blocking=True)
-        # distance=f"{str(msg.param1)}"
+        # Comment when not connected to UAV 
+        msg = connection.recv_match(type="COMMAND_LONG", blocking=True)
+        distance=f"{str(msg.param1)}"
         distance=f"{EXAMPLE_DISTANCE}"
         # Line below is only used for debugging:
         # print(distance)
