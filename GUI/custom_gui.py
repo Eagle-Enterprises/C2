@@ -10,7 +10,7 @@
 """
 
 
-import subprocess # Comment when not connected to UAV
+import subprocess
 import io
 from argparse import ArgumentParser
 from tkinter import StringVar
@@ -264,27 +264,6 @@ def find_device_by_serial_number(serial_number):
                 return port.device
         except Exception as e:
             pass
-def setup_mavlink(app):
-    """
-    Setup and start the MAVLink communication.
-
-    Args:
-        None
-
-    Returns:
-        None
-    """
-    # Comment when not connected to UAV
-    print()
-    try:
-        command = f"mavproxy.py --master={DEFAULT_PROTOCOL}{DEFAULT_CONNECTION}{DEFAULT_PORT} \
-        --out={NEW_CONNECTION}:{MISSION_PLANNER_PORT} \
-        --out={NEW_CONNECTION}:{PYTHON_PORT}"
-        subprocess.check_call(command, shell=True)
-    except subprocess.CalledProcessError:
-        print("UAV NOT CONNECTED")
-        app.uav_not_connected=True
-
 
 if __name__ == "__main__":
     # Create app
@@ -299,10 +278,8 @@ if __name__ == "__main__":
     except subprocess.CalledProcessError:
         print("UAV NOT CONNECTED")
         app.uav_not_connected=True
-    #setup_mavlink(app)
 
     # Start a connection listening on one of the pair ports
-    # Comment when not connected to UAV
     if not app.uav_not_connected:
         connection_string = f"{NEW_PORT_PROTOCOL}:{NEW_CONNECTION}:{PYTHON_PORT}"
         connection = mavutil.mavlink_connection(connection_string, source_system=args.SOURCE_SYSTEM)
@@ -318,13 +295,12 @@ if __name__ == "__main__":
         print("GPS NOT CONNECTED")
         app.gps_not_connected=True
 
-    # Comment when not connected to UAV
     # Wait for first heartbeat
     if not app.uav_not_connected:
         connection.wait_heartbeat()
 
     while 1:
-        # Comment when not connected to UAV 
+        # Obtain distance
         if not app.uav_not_connected:
             msg = connection.recv_match(type="COMMAND_LONG", blocking=True)
             distance=f"{str(msg.param1)}"
@@ -335,10 +311,12 @@ if __name__ == "__main__":
             # print(distance)
         else:
             app.distance_value.set("UAV NOT CONNECTED")
+        
+        # Obtain Location
         if(app.gps_not_connected):
             app.location_value.set("GPS NOT CONNECTED")
         else:
             app.update_asset_location(gps_serial_port)
         
-        #app.update_asset_location(gps_serial_port)
+        # Update app
         app.update()
