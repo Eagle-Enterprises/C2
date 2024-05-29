@@ -88,6 +88,6 @@ def find_device_by_serial_number(SERIAL_NUMBER):
 
 # Read COM PORT and update window display
 if __name__ == '__main__':
-    #list_port_info()
+    list_port_info()
     print(f"Searched for Serial Number: \"{SERIAL_NUMBER}\"")
     print(f"Port Found: {find_device_by_serial_number(SERIAL_NUMBER)}")
