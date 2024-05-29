@@ -45,15 +45,12 @@ NEW_PORT_PROTOCOL = "udpin"
 NEW_CONNECTION = "127.0.0.1"
 MISSION_PLANNER_PORT = 14550 # Pair Port 1 Reserved for Mission Planner
 PYTHON_PORT = 14551 # Pair Port 2 Reserved for Python Scripts
-GPS_NOT_CONNECTED = False
-UAV_NOT_CONNECTED = False
 
 # Set initial appearance mode
 # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_appearance_mode("System")
 # Themes: "blue" (standard), "green", "dark-blue"
 customtkinter.set_default_color_theme("dark-blue")
-
 
 # Parsing Setup
 parser = ArgumentParser(description=__doc__)
@@ -85,7 +82,11 @@ class App(customtkinter.CTk):
         """
 
         super().__init__()
-
+        
+        # Internal Variables
+        self.gps_not_connected = False
+        self.uav_not_connected = False
+        
         # Window configuration
         width = self.winfo_screenwidth() - X_POS
         self.geometry(f'{width}x{HEIGHT}+{X_POS}+{Y_POS}')
@@ -263,7 +264,7 @@ def find_device_by_serial_number(serial_number):
                 return port.device
         except Exception as e:
             pass
-def setup_mavlink():
+def setup_mavlink(app):
     """
     Setup and start the MAVLink communication.
 
@@ -281,9 +282,8 @@ def setup_mavlink():
         --out={NEW_CONNECTION}:{PYTHON_PORT}"
         subprocess.check_call(command, shell=True)
     except subprocess.CalledProcessError:
-        print("**EXCEPT**")
         print("UAV NOT CONNECTED")
-        UAV_NOT_CONNECTED=True
+        app.uav_not_connected=True
 
 
 if __name__ == "__main__":
@@ -291,11 +291,19 @@ if __name__ == "__main__":
     app = App()
 
     # Set up MavLink pair ports
-    setup_mavlink()
+    try:
+        command = f"mavproxy --master={DEFAULT_PROTOCOL}{DEFAULT_CONNECTION}{DEFAULT_PORT} \
+        --out={NEW_CONNECTION}:{MISSION_PLANNER_PORT} \
+        --out={NEW_CONNECTION}:{PYTHON_PORT}"
+        subprocess.check_call(command, shell=True)
+    except subprocess.CalledProcessError:
+        print("UAV NOT CONNECTED")
+        app.uav_not_connected=True
+    #setup_mavlink(app)
 
     # Start a connection listening on one of the pair ports
     # Comment when not connected to UAV
-    if not UAV_NOT_CONNECTED:
+    if not app.uav_not_connected:
         connection_string = f"{NEW_PORT_PROTOCOL}:{NEW_CONNECTION}:{PYTHON_PORT}"
         connection = mavutil.mavlink_connection(connection_string, source_system=args.SOURCE_SYSTEM)
 
@@ -308,16 +316,16 @@ if __name__ == "__main__":
         gps_serial_io = io.TextIOWrapper(io.BufferedRWPair(gps_serial_port, gps_serial_port))
     except serial.serialutil.SerialException:
         print("GPS NOT CONNECTED")
-        GPS_NOT_CONNECTED=True
+        app.gps_not_connected=True
 
     # Comment when not connected to UAV
     # Wait for first heartbeat
-    if not UAV_NOT_CONNECTED:
+    if not app.uav_not_connected:
         connection.wait_heartbeat()
 
     while 1:
         # Comment when not connected to UAV 
-        if not UAV_NOT_CONNECTED:
+        if not app.uav_not_connected:
             msg = connection.recv_match(type="COMMAND_LONG", blocking=True)
             distance=f"{str(msg.param1)}"
             app.update_asset_distance(distance)
@@ -327,7 +335,7 @@ if __name__ == "__main__":
             # print(distance)
         else:
             app.distance_value.set("UAV NOT CONNECTED")
-        if(GPS_NOT_CONNECTED):
+        if(app.gps_not_connected):
             app.location_value.set("GPS NOT CONNECTED")
         else:
             app.update_asset_location(gps_serial_port)
