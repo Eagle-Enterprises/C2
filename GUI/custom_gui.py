@@ -45,6 +45,8 @@ NEW_PORT_PROTOCOL = "udpin"
 NEW_CONNECTION = "127.0.0.1"
 MISSION_PLANNER_PORT = 14550 # Pair Port 1 Reserved for Mission Planner
 PYTHON_PORT = 14551 # Pair Port 2 Reserved for Python Scripts
+GPS_NOT_CONNECTED = False
+UAV_NOT_CONNECTED = False
 
 # Set initial appearance mode
 # Modes: "System" (standard), "Dark", "Light"
@@ -273,10 +275,15 @@ def setup_mavlink():
     """
     # Comment when not connected to UAV
     print()
-    command = f"mavproxy.py --master={DEFAULT_PROTOCOL}{DEFAULT_CONNECTION}{DEFAULT_PORT} \
-       --out={NEW_CONNECTION}:{MISSION_PLANNER_PORT} \
-       --out={NEW_CONNECTION}:{PYTHON_PORT}"
-    subprocess.Popen(command, shell=True)
+    try:
+        command = f"mavproxy.py --master={DEFAULT_PROTOCOL}{DEFAULT_CONNECTION}{DEFAULT_PORT} \
+        --out={NEW_CONNECTION}:{MISSION_PLANNER_PORT} \
+        --out={NEW_CONNECTION}:{PYTHON_PORT}"
+        subprocess.check_call(command, shell=True)
+    except subprocess.CalledProcessError:
+        print("**EXCEPT**")
+        print("UAV NOT CONNECTED")
+        UAV_NOT_CONNECTED=True
 
 
 if __name__ == "__main__":
@@ -288,28 +295,42 @@ if __name__ == "__main__":
 
     # Start a connection listening on one of the pair ports
     # Comment when not connected to UAV
-    connection_string = f"{NEW_PORT_PROTOCOL}:{NEW_CONNECTION}:{PYTHON_PORT}"
-    connection = mavutil.mavlink_connection(connection_string, source_system=args.SOURCE_SYSTEM)
+    if not UAV_NOT_CONNECTED:
+        connection_string = f"{NEW_PORT_PROTOCOL}:{NEW_CONNECTION}:{PYTHON_PORT}"
+        connection = mavutil.mavlink_connection(connection_string, source_system=args.SOURCE_SYSTEM)
 
     # Set up Asset RF GPS connection
     # gps_port=find_device_by_serial_number(SERIAL_NUMBER)
-    gps_serial_port = serial.Serial(port=DEFAULT_GPS_PORT, \
-        baudrate=GPS_BAUD_RATE, bytesize=8, timeout=2, \
-            stopbits=serial.STOPBITS_ONE)
-    gps_serial_io = io.TextIOWrapper(io.BufferedRWPair(gps_serial_port, gps_serial_port))
+    try:
+        gps_serial_port = serial.Serial(port=DEFAULT_GPS_PORT, \
+            baudrate=GPS_BAUD_RATE, bytesize=8, timeout=2, \
+                stopbits=serial.STOPBITS_ONE)
+        gps_serial_io = io.TextIOWrapper(io.BufferedRWPair(gps_serial_port, gps_serial_port))
+    except serial.serialutil.SerialException:
+        print("GPS NOT CONNECTED")
+        GPS_NOT_CONNECTED=True
 
     # Comment when not connected to UAV
     # Wait for first heartbeat
-    connection.wait_heartbeat()
+    if not UAV_NOT_CONNECTED:
+        connection.wait_heartbeat()
 
     while 1:
         # Comment when not connected to UAV 
-        msg = connection.recv_match(type="COMMAND_LONG", blocking=True)
-        distance=f"{str(msg.param1)}"
-        # Line below is only used for debugging:
-        #distance=f"{EXAMPLE_DISTANCE}"
-        # Line below is only used for debugging:
-        # print(distance)
-        app.update_asset_distance(distance)
-        app.update_asset_location(gps_serial_port)
+        if not UAV_NOT_CONNECTED:
+            msg = connection.recv_match(type="COMMAND_LONG", blocking=True)
+            distance=f"{str(msg.param1)}"
+            app.update_asset_distance(distance)
+            # Line below is only used for debugging:
+            #distance=f"{EXAMPLE_DISTANCE}"
+            # Line below is only used for debugging:
+            # print(distance)
+        else:
+            app.distance_value.set("UAV NOT CONNECTED")
+        if(GPS_NOT_CONNECTED):
+            app.location_value.set("GPS NOT CONNECTED")
+        else:
+            app.update_asset_location(gps_serial_port)
+        
+        #app.update_asset_location(gps_serial_port)
         app.update()
