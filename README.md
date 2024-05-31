@@ -2,6 +2,11 @@
 
 Software Repository for files relating to the Command and Control IPT
 
+## Branch merge process
+
+Please merge all code to the pre-test branch when code is still unstable but
+needs to be shared and merged to other branches.
+
 ## Remote C2 mini-PC login / access
 
 In order to login to the C2 remotely which is located in Nick Hubchak's home
