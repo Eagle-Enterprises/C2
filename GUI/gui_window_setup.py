@@ -34,8 +34,8 @@ MISSION_PLANNER_PATH = 'C:\\Program Files (x86)\\Mission Planner\\MissionPlanner
 
 
 # Open Mission Planner, Custom GUI, and OBS Studio
-#programs = [CUSTOM_GUI_COMMAND, MISSION_PLANNER_PATH, OBS_FULL_PATH] #change OBS_COMMAND to OBS_PATH later
-programs = [CUSTOM_GUI_COMMAND]
+programs = [CUSTOM_GUI_COMMAND, MISSION_PLANNER_PATH, OBS_FULL_PATH] #change OBS_COMMAND to OBS_PATH later
+#programs = [CUSTOM_GUI_COMMAND]
 for program in programs:
     if (program == OBS_FULL_PATH):
         os.chdir(OBS_DIRECTORY)
@@ -62,16 +62,16 @@ for window in windows:
 
 # Specify the name of the window to resize
 customGUI = pygetwindow.getWindowsWithTitle("CAPTURE")[0]
-#missionPlanner = pygetwindow.getWindowsWithTitle("Mission Planner 1.3.81 build 1.3.8741.25556")[0]
-#videoFeed = pygetwindow.getWindowsWithTitle("Windowed Projector (Preview)")[0]
+missionPlanner = pygetwindow.getWindowsWithTitle("Mission Planner 1.3.81 build 1.3.8741.25556")[0]
+videoFeed = pygetwindow.getWindowsWithTitle("Windowed Projector (Preview)")[0]
 
 #resize the window
 customGUI.resizeTo(1380, 175)
 customGUI.moveTo(-7, 0)
-#missionPlanner.resizeTo(997, 563)
-#missionPlanner.moveTo(-7, 167)
-#videoFeed.resizeTo(397, 563)
-#videoFeed.moveTo(975, 167)
+missionPlanner.resizeTo(997, 563)
+missionPlanner.moveTo(-7, 167)
+videoFeed.resizeTo(397, 563)
+videoFeed.moveTo(975, 167)
 
 
 # if __name__ == '__main__':

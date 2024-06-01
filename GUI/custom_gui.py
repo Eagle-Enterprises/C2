@@ -270,53 +270,53 @@ if __name__ == "__main__":
     app = App()
 
     # Set up MavLink pair ports
-    try:
-        command = f"mavproxy --master={DEFAULT_PROTOCOL}{DEFAULT_CONNECTION}{DEFAULT_PORT} \
-        --out={NEW_CONNECTION}:{MISSION_PLANNER_PORT} \
-        --out={NEW_CONNECTION}:{PYTHON_PORT}"
-        subprocess.check_call(command, shell=True)
-    except subprocess.CalledProcessError:
-        print("UAV NOT CONNECTED")
-        app.uav_not_connected=True
+    #try:
+    command = f"mavproxy.py --master={DEFAULT_PROTOCOL}{DEFAULT_CONNECTION}{DEFAULT_PORT} \
+    --out={NEW_CONNECTION}:{MISSION_PLANNER_PORT} \
+    --out={NEW_CONNECTION}:{PYTHON_PORT}"
+    subprocess.Popen(command, shell=True)
+    #except subprocess.CalledProcessError:
+        #print("UAV NOT CONNECTED")
+        #app.uav_not_connected=True
 
     # Start a connection listening on one of the pair ports
-    if not app.uav_not_connected:
-        connection_string = f"{NEW_PORT_PROTOCOL}:{NEW_CONNECTION}:{PYTHON_PORT}"
-        connection = mavutil.mavlink_connection(connection_string, source_system=args.SOURCE_SYSTEM)
+    #if not app.uav_not_connected:
+    connection_string = f"{NEW_PORT_PROTOCOL}:{NEW_CONNECTION}:{PYTHON_PORT}"
+    connection = mavutil.mavlink_connection(connection_string, source_system=args.SOURCE_SYSTEM)
 
     # Set up Asset RF GPS connection
     # gps_port=find_device_by_serial_number(SERIAL_NUMBER)
-    try:
-        gps_serial_port = serial.Serial(port=DEFAULT_GPS_PORT, \
-            baudrate=GPS_BAUD_RATE, bytesize=8, timeout=2, \
-                stopbits=serial.STOPBITS_ONE)
-        gps_serial_io = io.TextIOWrapper(io.BufferedRWPair(gps_serial_port, gps_serial_port))
-    except serial.serialutil.SerialException:
-        print("GPS NOT CONNECTED")
-        app.gps_not_connected=True
+    #try:
+    gps_serial_port = serial.Serial(port=DEFAULT_GPS_PORT, \
+        baudrate=GPS_BAUD_RATE, bytesize=8, timeout=2, \
+        stopbits=serial.STOPBITS_ONE)
+    gps_serial_io = io.TextIOWrapper(io.BufferedRWPair(gps_serial_port, gps_serial_port))
+    #except serial.serialutil.SerialException:
+        #print("GPS NOT CONNECTED")
+        #app.gps_not_connected=True
 
     # Wait for first heartbeat
-    if not app.uav_not_connected:
-        connection.wait_heartbeat()
+    #if not app.uav_not_connected:
+    connection.wait_heartbeat()
 
     while 1:
         # Obtain distance
-        if not app.uav_not_connected:
-            msg = connection.recv_match(type="COMMAND_LONG", blocking=True)
-            distance=f"{str(msg.param1)}"
-            app.update_asset_distance(distance)
+        #if not app.uav_not_connected:
+        msg = connection.recv_match(type="COMMAND_LONG", blocking=True)
+        distance=f"{str(msg.param1)}"
+        app.update_asset_distance(distance)
             # Line below is only used for debugging:
             #distance=f"{EXAMPLE_DISTANCE}"
             # Line below is only used for debugging:
             # print(distance)
-        else:
-            app.distance_value.set("UAV NOT CONNECTED")
+        #else:
+            #app.distance_value.set("UAV NOT CONNECTED")
         
         # Obtain Location
-        if(app.gps_not_connected):
-            app.location_value.set("GPS NOT CONNECTED")
-        else:
-            app.update_asset_location(gps_serial_port)
+        #if(app.gps_not_connected):
+        #app.location_value.set("GPS NOT CONNECTED")
+        #else:
+        app.update_asset_location(gps_serial_port)
         
         # Update app
         app.update()
