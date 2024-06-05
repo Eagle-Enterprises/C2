@@ -2,6 +2,9 @@
 
 Software Repository for files relating to the Command and Control IPT
 
+## Mission Planner Documentation can be found here: 
+[Setup Waypoints and more for Mission Planner Confluence Page ](https://docs.us.lmco.com/display/LCP23Team6/Mission+Planner+Documentation)
+
 ## Branch merge process
 
 Please merge all code to the pre-test branch when code is still unstable but
