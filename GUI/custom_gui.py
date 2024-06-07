@@ -34,6 +34,7 @@ X_POS = -7
 Y_POS = 0
 INITIAL_LOCATION="0"
 INITIAL_DISTANCE="0"
+INITIAL_SAT_COUNT="0"
 SERIAL_NUMBER="95032303837351F031D2"
 GPS_BAUD_RATE = 115200
 # MavProxy connection constants
@@ -110,6 +111,12 @@ class App(customtkinter.CTk):
         self.location_value = StringVar(value=INITIAL_LOCATION)
         #special_distance=StringVar(value=INITIAL_DISTANCE)
 
+        intial_satellite_label_content="Counting satellites...."
+        self.c="Sattelite found: "
+        self.satellite_label_content= StringVar()
+        self.satellite_label_content.set(intial_satellite_label_content)
+        self.sat_count = StringVar(value=INITIAL_SAT_COUNT)
+
         # Distance
         initial_distance_label_content="Calculating target distance..."
         self.final_distance_label_content="Distance form Target:"
@@ -160,6 +167,22 @@ class App(customtkinter.CTk):
                 font=customtkinter.CTkFont(size=14))
         location_value_label.grid(row=0, column=0, padx=20, pady=20)
 
+        #place holder behind asset sattelite
+        sat_bkg = customtkinter.CTkFrame(self)
+        sat_bkg.grid(row=1, column=3, padx=(10,0), pady=(10,20), sticky="nsew")
+        sat_bkg.rowconfigure(0, weight=1)
+        sat_bkg.columnconfigure(0, weight=1)
+
+        #Satellite count title and value
+        sat_title_label = customtkinter.CTkLabel\
+            (self, textvariable=self.satellite_label_content, font=customtkinter.CTkFont\
+            (size=14, weight="bold"), justify="center", anchor="w")
+        sat_title_label.grid(row=0, column=3, padx=10, pady=20)
+        sat_value_label = customtkinter.CTkLabel\
+            (sat_bkg, textvariable=self.sat_count,\
+                font=customtkinter.CTkFont(size=14))
+        sat_value_label.grid(row=0, column=0, padx=20, pady=20)
+
         #Third column
 
         # Placeholder behind distance
@@ -205,11 +228,15 @@ class App(customtkinter.CTk):
         # Line below is only used for debugging
         # print(gps_string)
         string = str(gps_string)
+        print(string)
         if(string.__contains__("Received")):
+            print(string)
             split_string = string.split(":")
             lat=split_string[2].split(",")[0]
             lon=split_string[3].split(",")[0]
-            return f"{lat};{lon}"
+            sat=split_string[4]
+            print("SAT VALUE:", sat)
+            return f"{lat};{lon};{sat}"
 
     def update_asset_location(self, gps_serial_port_param):
         """
@@ -230,8 +257,10 @@ class App(customtkinter.CTk):
             if(location):
                 # Line below is only used for debugging
                 # print(location)
+                location_parts=location.split(';')
                 self.location_label_content.set(self.final_location_label_content)
-                self.location_value.set(location)
+                self.location_value.set(location_parts[0]+","+location_parts[1])
+                self.sat_count.set(location_parts[2])
                 # OPTIONAL: Copies location to clipboard so the user may paste it in MP
                 # self.clipboard_append(location)
         except Exception as e:
@@ -268,43 +297,51 @@ def find_device_by_serial_number(serial_number):
 if __name__ == "__main__":
     # Create app
     app = App()
+    app.update()
 
+        # Set up Asset RF GPS connection
+    # gps_port=find_device_by_serial_number(SERIAL_NUMBER)
+    try:
+        gps_serial_port = serial.Serial(port=DEFAULT_GPS_PORT, \
+        baudrate=GPS_BAUD_RATE, bytesize=8, timeout=2, \
+        stopbits=serial.STOPBITS_ONE)
+        try:
+            gps_serial_io = io.TextIOWrapper(io.BufferedRWPair(gps_serial_port, gps_serial_port))
+        except:
+            print("no GPS port detected so no SERIAL_IO")
+    except:
+        print("GPS NOT CONNECTED")
+        
     # Set up MavLink pair ports
-    #try:
     command = f"mavproxy.py --master={DEFAULT_PROTOCOL}{DEFAULT_CONNECTION}{DEFAULT_PORT} \
-    --out={NEW_CONNECTION}:{MISSION_PLANNER_PORT} \
-    --out={NEW_CONNECTION}:{PYTHON_PORT}"
-    subprocess.Popen(command, shell=True)
-    #except subprocess.CalledProcessError:
-        #print("UAV NOT CONNECTED")
-        #app.uav_not_connected=True
+        --out={NEW_CONNECTION}:{MISSION_PLANNER_PORT} \
+        --out={NEW_CONNECTION}:{PYTHON_PORT}"
+    try:
+        subprocess.Popen(command, shell=True)
+    except:
+        print("UAV NOT CONNECTED and mission planner not up and running")
+        
 
     # Start a connection listening on one of the pair ports
     #if not app.uav_not_connected:
     connection_string = f"{NEW_PORT_PROTOCOL}:{NEW_CONNECTION}:{PYTHON_PORT}"
-    connection = mavutil.mavlink_connection(connection_string, source_system=args.SOURCE_SYSTEM)
-
-    # Set up Asset RF GPS connection
-    # gps_port=find_device_by_serial_number(SERIAL_NUMBER)
-    #try:
-    gps_serial_port = serial.Serial(port=DEFAULT_GPS_PORT, \
-        baudrate=GPS_BAUD_RATE, bytesize=8, timeout=2, \
-        stopbits=serial.STOPBITS_ONE)
-    gps_serial_io = io.TextIOWrapper(io.BufferedRWPair(gps_serial_port, gps_serial_port))
-    #except serial.serialutil.SerialException:
-        #print("GPS NOT CONNECTED")
-        #app.gps_not_connected=True
-
+    try:
+        connection = mavutil.mavlink_connection(connection_string, source_system=args.SOURCE_SYSTEM)
+    except:
+        print("Error you dum dum no mavlink connection cuz nothing plugged in")
+    
     # Wait for first heartbeat
     #if not app.uav_not_connected:
     connection.wait_heartbeat()
 
     while 1:
+        app.update()
         # Obtain distance
         #if not app.uav_not_connected:
-        msg = connection.recv_match(type="COMMAND_LONG", blocking=True)
-        distance=f"{str(msg.param1)}"
-        app.update_asset_distance(distance)
+        try:
+            msg = connection.recv_match(type="COMMAND_LONG", blocking=True)
+        except:
+            print("Cant open connection to com8 check if antenna for pixhawk is connected to usb port")
             # Line below is only used for debugging:
             #distance=f"{EXAMPLE_DISTANCE}"
             # Line below is only used for debugging:
@@ -316,7 +353,10 @@ if __name__ == "__main__":
         #if(app.gps_not_connected):
         #app.location_value.set("GPS NOT CONNECTED")
         #else:
+        distance=f"{str(msg.param1)}"
+        app.update_asset_distance(distance)
         app.update_asset_location(gps_serial_port)
         
         # Update app
         app.update()
+        
