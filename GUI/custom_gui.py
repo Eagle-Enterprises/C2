@@ -266,7 +266,7 @@ class App(customtkinter.CTk):
         except Exception as e:
             print(e)
 
-    def update_asset_distance(self, distance_param):
+def update_asset_distance(self, distance_param):
         """
         Updates the displayed asset distance if the provided distance is greater than 0.
 
