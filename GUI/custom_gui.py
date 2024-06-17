@@ -104,7 +104,7 @@ class App(customtkinter.CTk):
         # Variables and constants
 
         # Location
-        initial_location_label_content="Calculating target position…"
+        initial_location_label_content="Calculating target positionâ€¦"
         self.final_location_label_content="Target found at:"
         self.location_label_content = StringVar()
         self.location_label_content.set(initial_location_label_content)
@@ -112,7 +112,7 @@ class App(customtkinter.CTk):
         #special_distance=StringVar(value=INITIAL_DISTANCE)
 
         intial_satellite_label_content="Counting satellites...."
-        self.c="Sattelite found: "
+        self.satellite_label_content="Sattelite found: "
         self.satellite_label_content= StringVar()
         self.satellite_label_content.set(intial_satellite_label_content)
         self.sat_count = StringVar(value=INITIAL_SAT_COUNT)
@@ -150,7 +150,6 @@ class App(customtkinter.CTk):
         appearance_mode_optionemenu.set("Dark")
 
         # Second column
-
         # Placeholder behind asset location
         location_bkg = customtkinter.CTkFrame(self)
         location_bkg.grid(row=1, column=2, padx=(20, 0), pady=(10, 20), sticky="nsew")
@@ -181,7 +180,7 @@ class App(customtkinter.CTk):
         sat_value_label = customtkinter.CTkLabel\
             (sat_bkg, textvariable=self.sat_count,\
                 font=customtkinter.CTkFont(size=14))
-        sat_value_label.grid(row=0, column=0, padx=20, pady=20)
+        sat_value_label.grid(row=0, column=0, padx=10, pady=2)
 
         #Third column
 
@@ -228,14 +227,14 @@ class App(customtkinter.CTk):
         # Line below is only used for debugging
         # print(gps_string)
         string = str(gps_string)
-        print(string)
-        if(string.__contains__("Received")):
+        # print(string)
+        if(string.__contains__("LAT")):
             print(string)
             split_string = string.split(":")
-            lat=split_string[2].split(",")[0]
-            lon=split_string[3].split(",")[0]
-            sat=split_string[4]
-            print("SAT VALUE:", sat)
+            lat=split_string[1].split(",")[0]
+            lon=split_string[2].split(",")[0]
+            sat=split_string[3]
+            #print("SAT VALUE:", sat)
             return f"{lat};{lon};{sat}"
 
     def update_asset_location(self, gps_serial_port_param):
@@ -256,7 +255,7 @@ class App(customtkinter.CTk):
                 gps_serial_port_param.readline().decode('ascii', errors='replace'))
             if(location):
                 # Line below is only used for debugging
-                # print(location)
+                print(location)
                 location_parts=location.split(';')
                 self.location_label_content.set(self.final_location_label_content)
                 self.location_value.set(location_parts[0]+","+location_parts[1])
@@ -266,7 +265,7 @@ class App(customtkinter.CTk):
         except Exception as e:
             print(e)
 
-def update_asset_distance(self, distance_param):
+    def update_asset_distance(self, distance_param):
         """
         Updates the displayed asset distance if the provided distance is greater than 0.
 
@@ -335,7 +334,7 @@ if __name__ == "__main__":
     connection.wait_heartbeat()
 
     while 1:
-        app.update()
+
         # Obtain distance
         #if not app.uav_not_connected:
         try:
@@ -359,4 +358,3 @@ if __name__ == "__main__":
         
         # Update app
         app.update()
-        
